@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentActivity;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.Location;
@@ -17,12 +18,14 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener {
 
-    private GoogleMap mMap;
+    private GoogleMap map;
     double currentLat;
     double currentLon;
 
@@ -63,7 +66,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
+        map = googleMap;
+        drawCircles();
 
         // Add a marker in Sydney and move the camera
 
@@ -79,8 +83,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         Log.i("TAG","lat:"+currentLat+"lon:"+currentLon);
         LatLng current = new LatLng(currentLat, currentLon);
-        mMap.addMarker(new MarkerOptions().position(current).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(current));
+        map.addMarker(new MarkerOptions().position(current).title("Marker in Sydney"));
+        map.moveCamera(CameraUpdateFactory.newLatLng(current));
 
 
 
@@ -110,5 +114,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         }
 
+    }
+    public void drawCircles() {
+        for(ParkingLot lot:DataHelper.getSingletonInstance().getParkingSpacesList()){
+            map.addCircle(new CircleOptions().center(lot.getLocation()).radius(500).
+                    strokeWidth(0).strokeColor(Color.parseColor("#50ff4d4d")).
+                    fillColor(Color.parseColor("#50ff4d4d")));
+        }
     }
 }
