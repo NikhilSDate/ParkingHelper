@@ -165,7 +165,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         lotHMVCapacity.setText(String.valueOf(currentLot.getHeavyVehicleCapacity()));
         lotStructureType.setText(DataHelper.getStructureTypeString(currentLot.getStructureType()));
         lotAccessType.setText(DataHelper.getAccessTypeString(currentLot.getAccessType()));
-        lotPriceCategory.setText(currentLot.getPriceCategory());
+        lotPriceCategory.setText(String.valueOf(currentLot.getPriceCategory()));
         lotFreeParking.setText(DataHelper.getIsFreeParkingString(currentLot.isFreeParking()));
         lotWard.setText(currentLot.getWard());
         lotGisId.setText(currentLot.getGisId());

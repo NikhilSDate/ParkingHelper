@@ -5,7 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/bottom_sheet_layout">
+    android:id="@+id/bottom_sheet_layout"
+    app:layout_behavior="@string/bottom_sheet_behavior">
 
     <TextView
         android:id="@+id/lot_latitude"
