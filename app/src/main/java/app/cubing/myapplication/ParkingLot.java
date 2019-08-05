@@ -1,7 +1,5 @@
 package app.cubing.myapplication;
 
-import android.location.Location;
-
 import com.google.android.gms.maps.model.LatLng;
 
 public class ParkingLot {
@@ -23,7 +21,7 @@ public class ParkingLot {
     private int twoWheelerCapacity;
     private int lightFourWheelerCapacity;
     private int lightCommercialFourWheelerCapacity;
-    private int heavyFourWheelerCapacity;
+    private int heavyVehicleCapacity;
 
 
 
@@ -44,7 +42,7 @@ public class ParkingLot {
         this.twoWheelerCapacity = twoWheelerCapacity;
         this.lightFourWheelerCapacity = lightFourWheelerCapacity;
         this.lightCommercialFourWheelerCapacity=lightCommercialFourWheelerCapacity;
-        this.heavyFourWheelerCapacity = heavyFourWheelerCapacity;
+        this.heavyVehicleCapacity = heavyFourWheelerCapacity;
     }
     @Override
     public String toString() {
@@ -62,25 +60,10 @@ public class ParkingLot {
                 ", twoWheelerCapacity=" + twoWheelerCapacity +
                 ", lightFourWheelerCapacity=" + lightFourWheelerCapacity +
                 ", lightCommercialFourWheelerCapacity=" + lightCommercialFourWheelerCapacity +
-                ", heavyFourWheelerCapacity=" + heavyFourWheelerCapacity +
+                ", heavyVehicleCapacity=" + heavyVehicleCapacity +
                 '}';
     }
 
-    public static int getMULTISTOREY() {
-        return MULTISTOREY;
-    }
-
-    public static int getUNDERGROUND() {
-        return UNDERGROUND;
-    }
-
-    public static int getRAMP() {
-        return RAMP;
-    }
-
-    public static int getELEVATOR() {
-        return ELEVATOR;
-    }
 
     public String getGisId() {
         return gisId;
@@ -134,7 +117,7 @@ public class ParkingLot {
         return lightCommercialFourWheelerCapacity;
     }
 
-    public int getHeavyFourWheelerCapacity() {
-        return heavyFourWheelerCapacity;
+    public int getHeavyVehicleCapacity() {
+        return heavyVehicleCapacity;
     }
 }

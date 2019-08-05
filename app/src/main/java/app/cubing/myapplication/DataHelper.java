@@ -1,19 +1,14 @@
 package app.cubing.myapplication;
 
 import android.content.Context;
-import android.location.Location;
-import android.provider.ContactsContract;
 
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class DataHelper {
     private ArrayList<ParkingLot> parkingSpacesList=new ArrayList<ParkingLot>();
@@ -35,8 +30,8 @@ public class DataHelper {
                 String name=tokens[2];
                 LatLng location =new LatLng(Double.valueOf(tokens[3]),Double.valueOf(tokens[4]));
                 String address=tokens[5];
-                int structureType=getStructureType(tokens[6]);
-                int access=getAccessType(tokens[7]);
+                int structureType= getStructureTypeInt(tokens[6]);
+                int access= getAccessTypeInt(tokens[7]);
                 String operator=tokens[8];
                 boolean isFreeParking=Boolean.valueOf(tokens[9]);
                 char priceCategory=tokens[10].charAt(0);
@@ -59,7 +54,7 @@ public class DataHelper {
         return parkingSpacesList;
 
     }
-    public int getStructureType(String structureType){
+    public static int getStructureTypeInt(String structureType){
         if(structureType.equals("MULTISTOREY")){
             return ParkingLot.MULTISTOREY;
         }else if(structureType.equals("UNDERGROUND")){
@@ -69,7 +64,7 @@ public class DataHelper {
         }
 
     }
-    public int getAccessType(String accessType){
+    public static int getAccessTypeInt(String accessType){
         if(accessType.equals("RAMP")){
             return ParkingLot.RAMP;
         }else if(accessType.equals("ELEVATOR")){
@@ -78,6 +73,33 @@ public class DataHelper {
             return -1;
         }
 
+    }
+    public static String getStructureTypeString(int structureType){
+        if(structureType==ParkingLot.MULTISTOREY){
+            return "Multistorey";
+        }else if(structureType==ParkingLot.UNDERGROUND){
+            return "Underground";
+        }else{
+            return "";
+        }
+
+    }
+    public static String getAccessTypeString(int accessType){
+        if(accessType==ParkingLot.RAMP){
+            return "Ramp";
+        }else if(accessType==ParkingLot.ELEVATOR){
+            return "Elevator";
+        }else{
+            return "";
+        }
+
+    }
+    public static String getIsFreeParkingString(boolean isFreeParking){
+        if(isFreeParking){
+            return "Yes";
+        }else{
+            return "No";
+        }
     }
 
 }
