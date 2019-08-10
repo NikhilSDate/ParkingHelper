@@ -7,23 +7,35 @@ import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.button.MaterialButton;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener {
 
@@ -31,6 +43,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     double currentLat;
     double currentLon;
     BottomSheetBehavior behavior;
+    Marker currentMarker;
+    MaterialButton checkButton;
+    MaterialButton directionsButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +53,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_maps);
         ConstraintLayout bottomSheet=findViewById(R.id.bottom_sheet_layout);
         behavior=BottomSheetBehavior.from(bottomSheet);
-        DataHelper.getSingletonInstance().loadData(this);
+        checkButton=findViewById(R.id.check_button);
+        directionsButton=findViewById(R.id.directions_button);
+        checkButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#e0da28")));
+        behavior.setPeekHeight(0);
+        behavior.setHideable(true);
+        behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
         Log.i("TAG",DataHelper.getSingletonInstance().getParkingSpacesList().toString());
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -57,6 +77,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             ex.printStackTrace();
 
         }
+        checkButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean isSafe=true;
+                for(ParkingLot lot:DataHelper.getSingletonInstance().getParkingSpacesList()){
+                    if(Utils.getDistance(new LatLng(currentLat,currentLon),lot.getLocation())<=500){
+                        isSafe=false;
+                    }
+                }
+                if(isSafe){
+                    checkButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#4cfc2d")));
+                }else{
+                    checkButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#fc3a3a")));
+                }
+            }
+        });
+
     }
 
 
@@ -76,13 +113,29 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
-                ParkingLot clickedLot=Utils.getClickedLot(latLng);
-                showBottomSheet(clickedLot);
+
+                final ParkingLot clickedLot=Utils.getClickedLot(latLng);
+                if(clickedLot!=null) {
+                    showBottomSheet(clickedLot);
+                    directionsButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Uri mapIntentUri=Uri.parse("google.navigation:q="+clickedLot.getLocation().latitude+","+clickedLot.getLocation().longitude);
+                            Intent mapIntent=new Intent(Intent.ACTION_VIEW,mapIntentUri);
+                            mapIntent.setPackage("com.google.android.apps.maps");
+                            startActivity(mapIntent);
+
+                        }
+                    });
+                }else{
+                    behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                }
+
+
             }
         });
 
 
-        // Add a marker in Sydney and move the camera
 
 
     }
@@ -93,10 +146,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onLocationChanged(Location location) {
         currentLat=location.getLatitude();
         currentLon=location.getLongitude();
+        if(currentMarker!=null) {
+            currentMarker.remove();
+        }
 
         Log.i("TAG","lat:"+currentLat+"lon:"+currentLon);
         LatLng current = new LatLng(currentLat, currentLon);
-        map.addMarker(new MarkerOptions().position(current).title("Marker in Sydney"));
+        Bitmap bitmap=Utils.getBitmapFromResource(R.drawable.location_dot,this);
+        currentMarker=map.addMarker(new MarkerOptions().position(current).icon(BitmapDescriptorFactory.fromBitmap(bitmap)));
+        map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLat,currentLon),15));
+
 
 
 
@@ -157,19 +216,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         lotName.setText(currentLot.getName());
         lotAddress.setText(currentLot.getAddress());
-        lotLatitude.setText(String.valueOf(currentLot.getLocation().latitude));
-        lotLongitude.setText(String.valueOf(currentLot.getLocation().longitude));
-        lot2wCapacity.setText(String.valueOf(currentLot.getTwoWheelerCapacity()));
-        lotLMVCapacity.setText(String.valueOf(currentLot.getLightFourWheelerCapacity()));
-        lotLCVCapacity.setText(String.valueOf(currentLot.getLightCommercialFourWheelerCapacity()));
-        lotHMVCapacity.setText(String.valueOf(currentLot.getHeavyVehicleCapacity()));
-        lotStructureType.setText(DataHelper.getStructureTypeString(currentLot.getStructureType()));
-        lotAccessType.setText(DataHelper.getAccessTypeString(currentLot.getAccessType()));
-        lotPriceCategory.setText(String.valueOf(currentLot.getPriceCategory()));
-        lotFreeParking.setText(DataHelper.getIsFreeParkingString(currentLot.isFreeParking()));
-        lotWard.setText(currentLot.getWard());
-        lotGisId.setText(currentLot.getGisId());
-        lotOperator.setText(currentLot.getOperator());
+        lotLatitude.setText("Lat:"+String.valueOf(currentLot.getLocation().latitude));
+        lotLongitude.setText("Lon:"+String.valueOf(currentLot.getLocation().longitude));
+        lot2wCapacity.setText("2W:" +String.valueOf(currentLot.getTwoWheelerCapacity()));
+        lotLMVCapacity.setText("LMV:"+String.valueOf(currentLot.getLightFourWheelerCapacity()));
+        lotLCVCapacity.setText("LCV:"+String.valueOf(currentLot.getLightCommercialFourWheelerCapacity()));
+        lotHMVCapacity.setText("HMV:"+String.valueOf(currentLot.getHeavyVehicleCapacity()));
+        lotStructureType.setText("Structure type:"+DataHelper.getStructureTypeString(currentLot.getStructureType()));
+        lotAccessType.setText("Access type:"+DataHelper.getAccessTypeString(currentLot.getAccessType()));
+        lotPriceCategory.setText("Price category:"+String.valueOf(currentLot.getPriceCategory()));
+        lotFreeParking.setText("Free parking:"+DataHelper.getIsFreeParkingString(currentLot.isFreeParking()));
+        lotWard.setText("Ward:"+currentLot.getWard());
+        lotGisId.setText("GIS Id:"+currentLot.getGisId());
+        lotOperator.setText("Operator:"+currentLot.getOperator());
 
         behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
 

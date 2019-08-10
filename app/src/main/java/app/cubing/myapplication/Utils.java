@@ -1,5 +1,10 @@
 package app.cubing.myapplication;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
+
 import com.google.android.gms.maps.model.LatLng;
 
 public class Utils {
@@ -25,6 +30,16 @@ public class Utils {
         double y=lat1-lat2;
         double distance=RADIUS*Math.sqrt(x*x+y*y);
         return distance;
+
+    }
+    public static Bitmap getBitmapFromResource(int resource, Context context){
+        Drawable drawable=context.getResources().getDrawable(resource,context.getTheme());
+        Canvas canvas=new Canvas();
+        Bitmap bitmap=Bitmap.createBitmap(drawable.getIntrinsicWidth(),drawable.getIntrinsicHeight(),Bitmap.Config.ARGB_8888);
+        canvas.setBitmap(bitmap);
+        drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+        drawable.draw(canvas);
+        return bitmap;
 
     }
 }
