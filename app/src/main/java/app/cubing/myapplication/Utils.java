@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 
 public class Utils {
     public static final int RADIUS=6371000;
@@ -13,7 +14,7 @@ public class Utils {
     public static ParkingLot getClickedLot(LatLng latLng){
         ParkingLot finalLot=null;
         for(ParkingLot lot:DataHelper.getSingletonInstance().getParkingSpacesList()){
-            if(getDistance(latLng,lot.getLocation())<=100){
+            if(getDistance(latLng,lot.getLocation())<=400){
                 finalLot=lot;
             }
         }
@@ -40,6 +41,41 @@ public class Utils {
         drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
         drawable.draw(canvas);
         return bitmap;
+
+    }
+    public static boolean isAtLeastOneLotVisible(LatLngBounds bounds){
+        boolean isAtLeastOneLotVisible=false;
+        for(ParkingLot lot:DataHelper.getSingletonInstance().getParkingSpacesList()) {
+            if(bounds.contains(lot.getLocation())){
+                isAtLeastOneLotVisible=true;
+            }
+
+        }
+        return isAtLeastOneLotVisible;
+    }
+    public static ParkingLot getNearestLot(LatLng location){
+        ParkingLot nearestLot=DataHelper.getSingletonInstance().getParkingSpacesList().get(0);
+        for(ParkingLot lot:DataHelper.getSingletonInstance().getParkingSpacesList()){
+            if(getDistance(location,lot.getLocation())<getDistance(location,nearestLot.getLocation())){
+                nearestLot=lot;
+            }
+        }
+        return nearestLot;
+    }
+    public static Bitmap resizeBitmap(Bitmap originalBitmap, float factor){
+        Bitmap resizedBitmap=Bitmap.createScaledBitmap(originalBitmap,(int)(originalBitmap.getWidth()*factor),(int)(originalBitmap.getHeight()*factor),true);
+        return resizedBitmap;
+    }
+    public static boolean isinNoParking(LatLng latLng){
+        boolean isInNoParking=false;
+        for(ParkingLot lot:DataHelper.getSingletonInstance().getParkingSpacesList()) {
+            if(getDistance(lot.getLocation(),latLng)<=500){
+                isInNoParking=true;
+                break;
+            }
+
+        }
+        return isInNoParking;
 
     }
 }

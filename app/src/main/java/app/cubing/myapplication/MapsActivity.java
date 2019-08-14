@@ -13,29 +13,31 @@ import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.button.MaterialButton;
+
+import java.util.ArrayList;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener {
 
@@ -46,6 +48,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     Marker currentMarker;
     MaterialButton checkButton;
     MaterialButton directionsButton;
+    boolean isFirstLocationChange;
+    ArrayList<Circle> circlesArray;
+    ImageView parkingAlert;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,10 +60,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         behavior=BottomSheetBehavior.from(bottomSheet);
         checkButton=findViewById(R.id.check_button);
         directionsButton=findViewById(R.id.directions_button);
+        parkingAlert=findViewById(R.id.parking_alert);
+        parkingAlert.setVisibility(View.GONE);
         checkButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#e0da28")));
         behavior.setPeekHeight(0);
         behavior.setHideable(true);
         behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+        isFirstLocationChange=true;
+        circlesArray=new ArrayList<>();
         Log.i("TAG",DataHelper.getSingletonInstance().getParkingSpacesList().toString());
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -80,17 +89,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         checkButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean isSafe=true;
-                for(ParkingLot lot:DataHelper.getSingletonInstance().getParkingSpacesList()){
-                    if(Utils.getDistance(new LatLng(currentLat,currentLon),lot.getLocation())<=500){
-                        isSafe=false;
-                    }
-                }
-                if(isSafe){
-                    checkButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#4cfc2d")));
-                }else{
-                    checkButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#fc3a3a")));
-                }
+               map.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(currentLat,currentLon)));
+               LatLngBounds.Builder builder=new LatLngBounds.Builder();
+               LatLng nearestLotLocation=Utils.getNearestLot(new LatLng(currentLat,currentLon)).getLocation();
+                builder.include(nearestLotLocation);
+                LatLng center =map.getCameraPosition().target;
+                LatLng lotLocationOpposite=new LatLng(2*center.latitude-nearestLotLocation.latitude,2*center.longitude-nearestLotLocation.longitude);
+                builder.include(nearestLotLocation);
+                builder.include(lotLocationOpposite);
+                LatLngBounds mapBounds=builder.build();
+                map.animateCamera(CameraUpdateFactory.newLatLngBounds(mapBounds,10));
             }
         });
 
@@ -109,7 +117,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
-        drawCircles();
+        updateCircles(new LatLng(currentLat,currentLon));
         map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
@@ -149,13 +157,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if(currentMarker!=null) {
             currentMarker.remove();
         }
-
+        updateCircles(new LatLng(currentLat,currentLon));
         Log.i("TAG","lat:"+currentLat+"lon:"+currentLon);
         LatLng current = new LatLng(currentLat, currentLon);
         Bitmap bitmap=Utils.getBitmapFromResource(R.drawable.location_dot,this);
         currentMarker=map.addMarker(new MarkerOptions().position(current).icon(BitmapDescriptorFactory.fromBitmap(bitmap)));
-        map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLat,currentLon),15));
-
+        if(isFirstLocationChange) {
+            map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLat, currentLon), 15));
+        }
+        if(Utils.isinNoParking(new LatLng(currentLat,currentLon))){
+            parkingAlert.setVisibility(View.VISIBLE);
+            parkingAlert.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //ShowDialog
+                }
+            });
+        }
 
 
 
@@ -187,14 +205,28 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
     }
-    public void drawCircles() {
+    public void updateCircles(LatLng currentLocation) {
+        for(Circle c:circlesArray){
+            if(c!=null) {
+                c.remove();
+            }
+        }
         for(ParkingLot lot:DataHelper.getSingletonInstance().getParkingSpacesList()){
-            map.addCircle(new CircleOptions().center(lot.getLocation()).radius(500).
-                    strokeWidth(0).strokeColor(Color.parseColor("#50ff4d4d")).
-                    fillColor(Color.parseColor("#50ff4d4d")));
-            map.addCircle(new CircleOptions().center(lot.getLocation()).radius(20).
-                    strokeWidth(0).strokeColor(Color.parseColor("#ff4d4d")).
-                    fillColor(Color.parseColor("#000000")));
+            if(Utils.getDistance(lot.getLocation(),currentLocation)<=500) {
+                Circle circle=map.addCircle(new CircleOptions().center(lot.getLocation()).radius(500).
+                        strokeWidth(0).strokeColor(Color.parseColor("#50ff4d4d")).
+                        fillColor(Color.parseColor("#50ff4d4d")));
+                circlesArray.add(circle);
+
+            }else{
+                Circle circle=map.addCircle(new CircleOptions().center(lot.getLocation()).radius(500).
+                        strokeWidth(0).strokeColor(Color.parseColor("#50ff4d4d")).
+                        fillColor(Color.parseColor("#50009dff")));
+                circlesArray.add(circle);
+            }
+            Bitmap bitmap= BitmapFactory.decodeResource(getResources(),R.drawable.p_icon);
+            Bitmap resizedBitmap=Utils.resizeBitmap(bitmap,0.25f);
+            map.addMarker(new MarkerOptions().position(lot.getLocation()).icon(BitmapDescriptorFactory.fromBitmap(resizedBitmap)));
         }
     }
     public void showBottomSheet(ParkingLot currentLot){

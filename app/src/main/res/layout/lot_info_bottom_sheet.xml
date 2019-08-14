@@ -20,6 +20,10 @@
         app:icon="@drawable/ic_baseline_directions_24px"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorWhiteTransparent"/>
     <TextView
         android:id="@+id/lot_latitude"
         android:layout_width="wrap_content"
