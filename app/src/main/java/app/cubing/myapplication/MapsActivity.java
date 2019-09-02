@@ -6,6 +6,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -51,6 +52,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     boolean isFirstLocationChange;
     ArrayList<Circle> circlesArray;
     ImageView parkingAlert;
+    TextView noParkingMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +63,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         checkButton=findViewById(R.id.check_button);
         directionsButton=findViewById(R.id.directions_button);
         parkingAlert=findViewById(R.id.parking_alert);
+        noParkingMessage=findViewById(R.id.no_parking_message);
         parkingAlert.setVisibility(View.GONE);
         checkButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#e0da28")));
         behavior.setPeekHeight(0);
@@ -165,14 +168,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if(isFirstLocationChange) {
             map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLat, currentLon), 15));
         }
-        if(Utils.isinNoParking(new LatLng(currentLat,currentLon))){
+        ParkingLot lot;
+        if((lot=Utils.isinNoParking(new LatLng(currentLat,currentLon)))!=null){
             parkingAlert.setVisibility(View.VISIBLE);
-            parkingAlert.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //ShowDialog
-                }
-            });
+            noParkingMessage.setText("You are in the no parking area of "+lot.getName());
+
         }
 
 
@@ -232,38 +232,29 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void showBottomSheet(ParkingLot currentLot){
         TextView lotName=findViewById(R.id.lot_name);
         TextView lotAddress=findViewById(R.id.lot_address);
-        TextView lotLatitude=findViewById(R.id.lot_latitude);
-        TextView lotLongitude=findViewById(R.id.lot_longitude);
         TextView lot2wCapacity=findViewById(R.id.lot_2w_capacity);
         TextView lotLMVCapacity=findViewById(R.id.lot_lmv_capacity);
         TextView lotLCVCapacity=findViewById(R.id.lot_lcv_capacity);
         TextView lotHMVCapacity=findViewById(R.id.lot_hmv_capacity);
         TextView lotStructureType=findViewById(R.id.lot_structure_type);
         TextView lotAccessType=findViewById(R.id.lot_access_type);
-        TextView lotPriceCategory=findViewById(R.id.lot_price_category);
         TextView lotFreeParking=findViewById(R.id.lot_free_parking);
-        TextView lotWard=findViewById(R.id.lot_ward);
-        TextView lotGisId=findViewById(R.id.lot_gis_id);
         TextView lotOperator=findViewById(R.id.lot_operator);
 
         lotName.setText(currentLot.getName());
         lotAddress.setText(currentLot.getAddress());
-        lotLatitude.setText("Lat:"+String.valueOf(currentLot.getLocation().latitude));
-        lotLongitude.setText("Lon:"+String.valueOf(currentLot.getLocation().longitude));
         lot2wCapacity.setText("2W:" +String.valueOf(currentLot.getTwoWheelerCapacity()));
         lotLMVCapacity.setText("LMV:"+String.valueOf(currentLot.getLightFourWheelerCapacity()));
         lotLCVCapacity.setText("LCV:"+String.valueOf(currentLot.getLightCommercialFourWheelerCapacity()));
         lotHMVCapacity.setText("HMV:"+String.valueOf(currentLot.getHeavyVehicleCapacity()));
-        lotStructureType.setText("Structure type:"+DataHelper.getStructureTypeString(currentLot.getStructureType()));
-        lotAccessType.setText("Access type:"+DataHelper.getAccessTypeString(currentLot.getAccessType()));
-        lotPriceCategory.setText("Price category:"+String.valueOf(currentLot.getPriceCategory()));
-        lotFreeParking.setText("Free parking:"+DataHelper.getIsFreeParkingString(currentLot.isFreeParking()));
-        lotWard.setText("Ward:"+currentLot.getWard());
-        lotGisId.setText("GIS Id:"+currentLot.getGisId());
-        lotOperator.setText("Operator:"+currentLot.getOperator());
+        lotStructureType.setText(DataHelper.getStructureTypeString(currentLot.getStructureType()));
+        lotAccessType.setText(DataHelper.getAccessTypeString(currentLot.getAccessType()));
+        lotFreeParking.setText(DataHelper.getIsFreeParkingString(currentLot.isFreeParking())+"("+currentLot.getPriceCategory()+")");
+        lotOperator.setText(currentLot.getOperator());
 
         behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
 
 
     }
+
 }

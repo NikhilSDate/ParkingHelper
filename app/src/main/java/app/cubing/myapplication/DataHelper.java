@@ -96,9 +96,9 @@ public class DataHelper {
     }
     public static String getIsFreeParkingString(boolean isFreeParking){
         if(isFreeParking){
-            return "Yes";
+            return "Free";
         }else{
-            return "No";
+            return "Paid";
         }
     }
 

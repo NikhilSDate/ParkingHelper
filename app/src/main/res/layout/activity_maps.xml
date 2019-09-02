@@ -46,11 +46,22 @@
             android:id="@+id/parking_alert"
             android:layout_width="118dp"
             android:layout_height="98dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@android:drawable/ic_dialog_alert" />
+            app:srcCompat="@drawable/no_parking_icon" />
+
+        <TextView
+            android:id="@+id/no_parking_message"
+            android:layout_width="142dp"
+            android:layout_height="85dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="TextView"
+            android:textAlignment="viewStart"
+            app:layout_constraintStart_toEndOf="@+id/parking_alert"
+            app:layout_constraintTop_toTopOf="@+id/map" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
