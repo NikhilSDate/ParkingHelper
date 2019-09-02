@@ -64,6 +64,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         directionsButton=findViewById(R.id.directions_button);
         parkingAlert=findViewById(R.id.parking_alert);
         noParkingMessage=findViewById(R.id.no_parking_message);
+        noParkingMessage.setVisibility(View.GONE);
         parkingAlert.setVisibility(View.GONE);
         checkButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#e0da28")));
         behavior.setPeekHeight(0);
@@ -171,8 +172,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         ParkingLot lot;
         if((lot=Utils.isinNoParking(new LatLng(currentLat,currentLon)))!=null){
             parkingAlert.setVisibility(View.VISIBLE);
-            noParkingMessage.setText("You are in the no parking area of "+lot.getName());
+            noParkingMessage.setVisibility(View.VISIBLE);
+            noParkingMessage.setText("You are in a no parking area");
 
+        }else{
+            parkingAlert.setVisibility(View.GONE);
+            noParkingMessage.setVisibility(View.GONE);
         }
 
 
