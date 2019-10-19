@@ -18,14 +18,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".SplashActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-
+        <activity android:name=".InfoActivity"></activity>
+        <activity
+            android:name=".SplashActivity"
+            android:theme="@style/AppTheme">
             <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN" />
 
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -41,9 +42,7 @@
 
         <activity
             android:name=".MapsActivity"
-            android:label="@string/title_activity_maps">
-
-        </activity>
+            android:label="@string/title_activity_maps" />
     </application>
 
 </manifest>

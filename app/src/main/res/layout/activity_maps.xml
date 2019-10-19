@@ -24,17 +24,17 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/check_button"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
             android:layout_gravity="bottom|end"
             android:layout_margin="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            android:insetTop="0dp"
-            android:insetBottom="0dp"
-            android:text="Check"
+            android:backgroundTint="@color/secondaryColor"
+
+            android:insetTop="4dp"
+            android:insetBottom="4dp"
+            android:text="Find Public Parking"
             android:textSize="18sp"
             android:elevation="16dp"
             app:cornerRadius="32dp"
@@ -65,7 +65,22 @@
             app:layout_constraintStart_toEndOf="@+id/parking_alert"
             app:layout_constraintTop_toTopOf="@+id/map" />
 
+
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/info_button"
+        style="@style/CustomFABStyle"
+        android:elevation="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|right"
+        android:layout_margin="16dp"
+        app:borderWidth="0dp"
+        app:fabSize="mini"
+        app:srcCompat="@drawable/ic_info_outline_black_24dp" />
 
     <include
         layout="@layout/lot_info_bottom_sheet"

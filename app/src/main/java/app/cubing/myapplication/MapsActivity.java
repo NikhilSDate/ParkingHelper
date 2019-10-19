@@ -37,6 +37,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
@@ -53,6 +54,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     ArrayList<Circle> circlesArray;
     ImageView parkingAlert;
     TextView noParkingMessage;
+    FloatingActionButton infoButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +66,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         directionsButton=findViewById(R.id.directions_button);
         parkingAlert=findViewById(R.id.parking_alert);
         noParkingMessage=findViewById(R.id.no_parking_message);
+        infoButton=findViewById(R.id.info_button);
         noParkingMessage.setVisibility(View.GONE);
         parkingAlert.setVisibility(View.GONE);
         checkButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#e0da28")));
@@ -103,6 +106,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 builder.include(lotLocationOpposite);
                 LatLngBounds mapBounds=builder.build();
                 map.animateCamera(CameraUpdateFactory.newLatLngBounds(mapBounds,10));
+            }
+        });
+        infoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(MapsActivity.this, InfoActivity.class);
+                startActivity(intent);
+
             }
         });
 
