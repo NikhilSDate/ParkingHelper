@@ -49,4 +49,23 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/disclaimerButton" />
 
+    <include
+
+        layout="@layout/about_bottom_sheet"
+        app:layout_constraintEnd_toEndOf="parent" />
+    <include
+        layout="@layout/privacy_bottom_sheet"
+
+        app:layout_constraintEnd_toEndOf="parent" />
+    <include
+        layout="@layout/disclaimer_bottom_sheet"
+
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <include
+        layout="@layout/copyright_bottom_sheet"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

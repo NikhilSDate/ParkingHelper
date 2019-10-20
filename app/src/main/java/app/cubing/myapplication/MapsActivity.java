@@ -99,7 +99,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                map.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(currentLat,currentLon)));
                LatLngBounds.Builder builder=new LatLngBounds.Builder();
                LatLng nearestLotLocation=Utils.getNearestLot(new LatLng(currentLat,currentLon)).getLocation();
-                builder.include(nearestLotLocation);
                 LatLng center =map.getCameraPosition().target;
                 LatLng lotLocationOpposite=new LatLng(2*center.latitude-nearestLotLocation.latitude,2*center.longitude-nearestLotLocation.longitude);
                 builder.include(nearestLotLocation);
