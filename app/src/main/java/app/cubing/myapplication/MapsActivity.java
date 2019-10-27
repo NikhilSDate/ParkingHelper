@@ -131,11 +131,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
-        updateCircles(new LatLng(currentLat,currentLon));
-        map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+        updateCircles(new LatLng(currentLat, currentLon));
+        map.setOnCircleClickListener(new GoogleMap.OnCircleClickListener() {
             @Override
-            public void onMapClick(LatLng latLng) {
-
+            public void onCircleClick(Circle circle) {
+                LatLng latLng=circle.getCenter();
                 final ParkingLot clickedLot=Utils.getClickedLot(latLng);
                 if(clickedLot!=null) {
                     showBottomSheet(clickedLot);
@@ -153,14 +153,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
                 }
 
-
             }
         });
-
-
-
-
     }
+
+
+
 
 
 
@@ -178,6 +176,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         currentMarker=map.addMarker(new MarkerOptions().position(current).icon(BitmapDescriptorFactory.fromBitmap(bitmap)));
         if(isFirstLocationChange) {
             map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLat, currentLon), 15));
+            isFirstLocationChange=false;
         }
         ParkingLot lot;
         if((lot=Utils.isinNoParking(new LatLng(currentLat,currentLon)))!=null){
@@ -232,16 +231,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         strokeWidth(0).strokeColor(Color.parseColor("#50ff4d4d")).
                         fillColor(Color.parseColor("#50ff4d4d")));
                 circlesArray.add(circle);
+                circle.setClickable(true);
 
             }else{
                 Circle circle=map.addCircle(new CircleOptions().center(lot.getLocation()).radius(500).
                         strokeWidth(0).strokeColor(Color.parseColor("#50ff4d4d")).
                         fillColor(Color.parseColor("#50009dff")));
                 circlesArray.add(circle);
+                circle.setClickable(true);
             }
             Bitmap bitmap= BitmapFactory.decodeResource(getResources(),R.drawable.p_icon);
             Bitmap resizedBitmap=Utils.resizeBitmap(bitmap,0.25f);
-            map.addMarker(new MarkerOptions().position(lot.getLocation()).icon(BitmapDescriptorFactory.fromBitmap(resizedBitmap)));
+            map.addMarker(new MarkerOptions().position(lot.getLocation()).icon(BitmapDescriptorFactory.fromBitmap(resizedBitmap)).anchor(0.5f,0.5f));
+//            map.addCircle(new CircleOptions().center(lot.getLocation()).radius(16).fillColor(Color.parseColor("#ff4d4d")).strokeWidth(0));
         }
     }
     public void showBottomSheet(ParkingLot currentLot){
@@ -253,7 +255,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         TextView lotHMVCapacity=findViewById(R.id.lot_hmv_capacity);
         TextView lotStructureType=findViewById(R.id.lot_structure_type);
         TextView lotAccessType=findViewById(R.id.lot_access_type);
-        TextView lotFreeParking=findViewById(R.id.lot_free_parking);
         TextView lotOperator=findViewById(R.id.lot_operator);
 
         lotName.setText(currentLot.getName());
@@ -264,7 +265,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         lotHMVCapacity.setText("HMV:"+String.valueOf(currentLot.getHeavyVehicleCapacity()));
         lotStructureType.setText(DataHelper.getStructureTypeString(currentLot.getStructureType()));
         lotAccessType.setText(DataHelper.getAccessTypeString(currentLot.getAccessType()));
-        lotFreeParking.setText(DataHelper.getIsFreeParkingString(currentLot.isFreeParking())+"("+currentLot.getPriceCategory()+")");
         lotOperator.setText(currentLot.getOperator());
 
         behavior.setState(BottomSheetBehavior.STATE_EXPANDED);

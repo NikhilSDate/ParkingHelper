@@ -2,4 +2,26 @@
     <string name="app_name">MumbaiParkingHelper</string>
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_info">InfoActivity</string>
+    <string name="about_text"></string>
+    <string name="privacy_text"></string>
+    <string name="disclaimer_text">
+        By using this app you agree to accept the following
+        Limitation of Liability and Disclaimer of Warranty:
+        You agree to use the information shown by this app as is,
+        as you see fit, and entirely at your own risk. You further
+        accept that your particular situation may not be
+        entirely suited to the use of this information provided by
+        this app and therefore you agree to use the app with the
+        understanding and acceptance that the benefit derived by you
+        from the use of this app may or may not be optimal. The creator
+        of this app make no representations or warranties with respect to
+        the accuracy or completeness of the parking information shown by this
+        app or any other information contained within the app and he
+        specifically disclaims any implied warranties of merchandability
+        or fitness for any particular purpose and shall in no event be liable
+        for any loss to you (either personal, commercial or non-commercial),
+        or loss of profit, or any kind of damage to you or your property,
+        including but not limited to physical, mental, special, incidental,
+        consequential, or other damages.
+    </string>
 </resources>
