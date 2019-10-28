@@ -28,12 +28,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/transparentWhiteColor"
-        android:focusable="true"
         android:clickable="true"
+        android:focusable="true"
 
-        tools:layout_editor_absoluteX="163dp"
-        tools:layout_editor_absoluteY="106dp"
-        />
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="0dp" />
     <TextView
         android:id="@+id/textView4"
         android:layout_width="wrap_content"

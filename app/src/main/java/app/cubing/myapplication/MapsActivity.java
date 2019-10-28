@@ -23,6 +23,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -53,7 +54,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     boolean isFirstLocationChange;
     ArrayList<Circle> circlesArray;
     ImageView parkingAlert;
-    TextView noParkingMessage;
     FloatingActionButton infoButton;
 
     @Override
@@ -64,10 +64,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         behavior=BottomSheetBehavior.from(bottomSheet);
         checkButton=findViewById(R.id.check_button);
         directionsButton=findViewById(R.id.directions_button);
-        parkingAlert=findViewById(R.id.parking_alert);
-        noParkingMessage=findViewById(R.id.no_parking_message);
         infoButton=findViewById(R.id.info_button);
-        noParkingMessage.setVisibility(View.GONE);
+        parkingAlert=findViewById(R.id.parking_alert);
         parkingAlert.setVisibility(View.GONE);
         checkButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#e0da28")));
         behavior.setPeekHeight(0);
@@ -178,15 +176,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLat, currentLon), 15));
             isFirstLocationChange=false;
         }
-        ParkingLot lot;
-        if((lot=Utils.isinNoParking(new LatLng(currentLat,currentLon)))!=null){
+        if((Utils.isinNoParking(new LatLng(currentLat,currentLon)))){
             parkingAlert.setVisibility(View.VISIBLE);
-            noParkingMessage.setVisibility(View.VISIBLE);
-            noParkingMessage.setText("You are in a no parking area");
+            Toast.makeText(this, R.string.no_parking_message,Toast.LENGTH_LONG).show();
+
 
         }else{
             parkingAlert.setVisibility(View.GONE);
-            noParkingMessage.setVisibility(View.GONE);
         }
 
 

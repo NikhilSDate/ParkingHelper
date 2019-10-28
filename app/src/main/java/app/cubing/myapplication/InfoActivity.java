@@ -14,10 +14,12 @@ public class InfoActivity extends AppCompatActivity {
     BottomSheetBehavior privacyBehavior;
     BottomSheetBehavior disclaimerBehavior;
     BottomSheetBehavior copyrightBehavior;
+    BottomSheetBehavior dataBehavior;
     MaterialButton aboutButton;
     MaterialButton privacyButton;
     MaterialButton disclaimerButton;
     MaterialButton copyrightButton;
+    MaterialButton dataButton;
 
 
     @Override
@@ -28,16 +30,19 @@ public class InfoActivity extends AppCompatActivity {
         ConstraintLayout privacyLayout=findViewById(R.id.privacy_bottom_sheet);
         ConstraintLayout disclaimerLayout=findViewById(R.id.disclaimer_bottom_sheet);
         ConstraintLayout copyrightLayout=findViewById(R.id.copyright_bottom_sheet);
-
+        final ConstraintLayout dataLayout=findViewById(R.id.data_bottom_sheet);
         aboutBehavior=BottomSheetBehavior.from(aboutLayout);
         privacyBehavior=BottomSheetBehavior.from(privacyLayout);
         disclaimerBehavior=BottomSheetBehavior.from(disclaimerLayout);
         copyrightBehavior=BottomSheetBehavior.from(copyrightLayout);
+        dataBehavior=BottomSheetBehavior.from(dataLayout);
+
 
         aboutButton=findViewById(R.id.about_button);
         privacyButton=findViewById(R.id.privacy_button);
         disclaimerButton=findViewById(R.id.disclaimer_button);
         copyrightButton=findViewById(R.id.copyright_button);
+        dataButton=findViewById(R.id.data_button);
 
         aboutButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,6 +51,7 @@ public class InfoActivity extends AppCompatActivity {
                 privacyBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 disclaimerBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 copyrightBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                dataBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             }
         });
         privacyButton.setOnClickListener(new View.OnClickListener() {
@@ -55,6 +61,7 @@ public class InfoActivity extends AppCompatActivity {
                 privacyBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                 disclaimerBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 copyrightBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                dataBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             }
         });
         disclaimerButton.setOnClickListener(new View.OnClickListener() {
@@ -64,6 +71,7 @@ public class InfoActivity extends AppCompatActivity {
                 privacyBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 disclaimerBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                 copyrightBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                dataBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             }
         });
         copyrightButton.setOnClickListener(new View.OnClickListener() {
@@ -73,6 +81,18 @@ public class InfoActivity extends AppCompatActivity {
                 privacyBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 disclaimerBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 copyrightBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                dataBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            }
+        });
+        dataButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                aboutBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                privacyBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                disclaimerBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                copyrightBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                dataBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+
             }
         });
 

@@ -66,16 +66,16 @@ public class Utils {
         Bitmap resizedBitmap=Bitmap.createScaledBitmap(originalBitmap,(int)(originalBitmap.getWidth()*factor),(int)(originalBitmap.getHeight()*factor),true);
         return resizedBitmap;
     }
-    public static ParkingLot isinNoParking(LatLng latLng){
-        ParkingLot noParkingLot=null;
+    public static boolean isinNoParking(LatLng latLng){
+        boolean isInNoParking=false;
         for(ParkingLot lot:DataHelper.getSingletonInstance().getParkingSpacesList()) {
             if(getDistance(lot.getLocation(),latLng)<=500){
-                noParkingLot=lot;
+                isInNoParking=true;
                 break;
             }
 
         }
-        return noParkingLot;
+        return isInNoParking;
 
     }
 }

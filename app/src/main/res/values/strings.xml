@@ -24,4 +24,7 @@
         including but not limited to physical, mental, special, incidental,
         consequential, or other damages.
     </string>
+    <string name="no_parking_message">CAUTION: You are within 500 meters \
+        of a public parking lot.STEEP FINES may apply for parking in
+        no-parking zones.</string>
 </resources>
