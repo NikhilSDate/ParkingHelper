@@ -7,6 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/bottom_sheet_layout"
+    android:elevation="16dp"
     app:layout_behavior="@string/bottom_sheet_behavior">
 
 
@@ -27,12 +28,13 @@
         android:id="@+id/imageView2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/transparentWhiteColor"
+        android:background="@color/transparentBlackColor"
         android:clickable="true"
         android:focusable="true"
 
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="0dp" />
+
     <TextView
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
@@ -40,6 +42,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="20dp"
         android:text="OPERATOR"
+        android:textColor="#F0F0F0"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -54,7 +57,7 @@
         android:layout_marginEnd="8dp"
         android:fontFamily="sans-serif"
         android:text="TextView"
-        android:textColor="@android:color/black"
+        android:textColor="#FFFFFF"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/directions_button"
@@ -69,6 +72,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:text="TextView"
+        android:textColor="#F0F0F0"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -82,6 +86,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="24dp"
         android:text="CAPACITY"
+        android:textColor="#F0F0F0"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -94,6 +99,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="24dp"
         android:text="ADDRESS"
+        android:textColor="#F0F0F0"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -106,6 +112,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="20dp"
         android:text="ACCESS"
+        android:textColor="#F0F0F0"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -118,7 +125,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:text="TextView"
-        android:textColor="@android:color/black"
+        android:textColor="#FFFFFF"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView9" />
@@ -129,7 +136,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="TextView"
-        android:textColor="@android:color/black"
+        android:textColor="#FFFFFA"
         android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@+id/view"
         app:layout_constraintTop_toBottomOf="@+id/textView9" />
@@ -141,7 +148,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="12dp"
         android:text="TextView"
-        android:textColor="@android:color/black"
+        android:textColor="#FFFFFA"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lot_2w_capacity" />
@@ -152,7 +159,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:text="TextView"
-        android:textColor="@android:color/black"
+        android:textColor="#FFFFFA"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="@+id/lot_lmv_capacity"
         app:layout_constraintTop_toBottomOf="@+id/lot_lmv_capacity" />
@@ -164,6 +171,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:text="TextView"
+        android:textColor="#FFFFFF"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView14" />
@@ -173,12 +181,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
         android:text="TextView"
+        android:textColor="#FFFFFF"
         android:textSize="16sp"
         app:layout_constraintStart_toEndOf="@id/view"
-        app:layout_constraintTop_toBottomOf="@+id/textView14"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/textView14" />
 
     <TextView
         android:id="@+id/lot_operator"
@@ -188,6 +195,7 @@
         android:layout_marginTop="12dp"
         android:layout_marginEnd="8dp"
         android:text="TextView"
+        android:textColor="#FFFFFF"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

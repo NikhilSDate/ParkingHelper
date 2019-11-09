@@ -78,8 +78,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        LocationManager manager=(LocationManager)getSystemService(Context.LOCATION_SERVICE);
         getPermissions();
+        
+
+        LocationManager manager=(LocationManager)getSystemService(Context.LOCATION_SERVICE);
 
         try {
             manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 500, 1, this);
@@ -255,10 +257,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         lotName.setText(currentLot.getName());
         lotAddress.setText(currentLot.getAddress());
-        lot2wCapacity.setText("2W:" +String.valueOf(currentLot.getTwoWheelerCapacity()));
-        lotLMVCapacity.setText("LMV:"+String.valueOf(currentLot.getLightFourWheelerCapacity()));
-        lotLCVCapacity.setText("LCV:"+String.valueOf(currentLot.getLightCommercialFourWheelerCapacity()));
-        lotHMVCapacity.setText("HMV:"+String.valueOf(currentLot.getHeavyVehicleCapacity()));
+        lot2wCapacity.setText("2W : " + Utils.getParkingCapacity(currentLot.getTwoWheelerCapacity()));
+        lotLMVCapacity.setText("LMV : "+String.valueOf(currentLot.getLightFourWheelerCapacity()));
+        lotLCVCapacity.setText("LCV : "+Utils.getParkingCapacity(currentLot.getLightCommercialFourWheelerCapacity()));
+        lotHMVCapacity.setText("HMV : "+String.valueOf(currentLot.getHeavyVehicleCapacity()));
         lotStructureType.setText(DataHelper.getStructureTypeString(currentLot.getStructureType()));
         lotAccessType.setText(DataHelper.getAccessTypeString(currentLot.getAccessType()));
         lotOperator.setText(currentLot.getOperator());

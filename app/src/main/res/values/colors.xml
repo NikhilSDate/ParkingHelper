@@ -11,4 +11,5 @@
     <color name="transparentWhiteColor">#E5FFFFFF</color>
     <color name="whiteColor">#FFFFFF</color>
     <color name="clear">#00FFFFFF</color>
+    <color name="transparentBlackColor">#E5000000</color>
 </resources>

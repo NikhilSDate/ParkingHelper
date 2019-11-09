@@ -15,8 +15,8 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
     <style name="CustomFABStyle" parent="@style/Widget.MaterialComponents.FloatingActionButton">
-        <item name="backgroundTint">@color/whiteColor</item>
-        <item name="tint">@color/primaryColor</item>
+        <item name="backgroundTint">@color/primaryColor</item>
+        <item name="tint">@color/whiteColor</item>
     </style>
 
 </resources>

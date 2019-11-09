@@ -3,6 +3,8 @@ package app.cubing.myapplication;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 
@@ -13,13 +15,14 @@ public class InfoActivity extends AppCompatActivity {
     BottomSheetBehavior aboutBehavior;
     BottomSheetBehavior privacyBehavior;
     BottomSheetBehavior disclaimerBehavior;
-    BottomSheetBehavior copyrightBehavior;
+    BottomSheetBehavior helpBehavior;
     BottomSheetBehavior dataBehavior;
     MaterialButton aboutButton;
     MaterialButton privacyButton;
     MaterialButton disclaimerButton;
-    MaterialButton copyrightButton;
+    MaterialButton helpButton;
     MaterialButton dataButton;
+    MaterialButton contactButton;
 
 
     @Override
@@ -29,20 +32,21 @@ public class InfoActivity extends AppCompatActivity {
         ConstraintLayout aboutLayout=findViewById(R.id.about_bottom_sheet);
         ConstraintLayout privacyLayout=findViewById(R.id.privacy_bottom_sheet);
         ConstraintLayout disclaimerLayout=findViewById(R.id.disclaimer_bottom_sheet);
-        ConstraintLayout copyrightLayout=findViewById(R.id.copyright_bottom_sheet);
-        final ConstraintLayout dataLayout=findViewById(R.id.data_bottom_sheet);
+        ConstraintLayout helpLayout=findViewById(R.id.help_bottom_sheet);
+        ConstraintLayout dataLayout=findViewById(R.id.data_bottom_sheet);
         aboutBehavior=BottomSheetBehavior.from(aboutLayout);
         privacyBehavior=BottomSheetBehavior.from(privacyLayout);
         disclaimerBehavior=BottomSheetBehavior.from(disclaimerLayout);
-        copyrightBehavior=BottomSheetBehavior.from(copyrightLayout);
+        helpBehavior=BottomSheetBehavior.from(helpLayout);
         dataBehavior=BottomSheetBehavior.from(dataLayout);
 
 
         aboutButton=findViewById(R.id.about_button);
         privacyButton=findViewById(R.id.privacy_button);
         disclaimerButton=findViewById(R.id.disclaimer_button);
-        copyrightButton=findViewById(R.id.copyright_button);
+        helpButton =findViewById(R.id.copyright_button);
         dataButton=findViewById(R.id.data_button);
+        contactButton=findViewById(R.id.contact_button);
 
         aboutButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,7 +54,7 @@ public class InfoActivity extends AppCompatActivity {
                 aboutBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                 privacyBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 disclaimerBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                copyrightBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                helpBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 dataBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             }
         });
@@ -60,7 +64,7 @@ public class InfoActivity extends AppCompatActivity {
                 aboutBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 privacyBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                 disclaimerBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                copyrightBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                helpBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 dataBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             }
         });
@@ -70,17 +74,17 @@ public class InfoActivity extends AppCompatActivity {
                 aboutBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 privacyBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 disclaimerBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-                copyrightBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                helpBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 dataBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             }
         });
-        copyrightButton.setOnClickListener(new View.OnClickListener() {
+        helpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 aboutBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 privacyBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 disclaimerBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                copyrightBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                helpBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                 dataBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             }
         });
@@ -90,8 +94,20 @@ public class InfoActivity extends AppCompatActivity {
                 aboutBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 privacyBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 disclaimerBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                copyrightBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                helpBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 dataBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+
+            }
+        });
+        contactButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent mailIntent=new Intent(Intent.ACTION_SENDTO);
+                mailIntent.setData(Uri.parse("mailto:"));
+                mailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"mumbaiparkinghelper@gmail.com"});
+                mailIntent.putExtra(Intent.EXTRA_SUBJECT, "Placeholder subject");
+                mailIntent.putExtra(Intent.EXTRA_TEXT, "Placeholder text");
+                startActivity(mailIntent);
 
             }
         });

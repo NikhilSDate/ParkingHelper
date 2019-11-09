@@ -78,5 +78,15 @@ public class Utils {
         return isInNoParking;
 
     }
+    public static String getParkingCapacity(int capacity){
+        String result;
+        if(capacity==-1){
+            result="ALLOWED";
+        }else{
+            result=Integer.toString(capacity);
+        }
+        return result;
+    }
+
 }
 

@@ -22,77 +22,104 @@
 
         app:layout_constraintEnd_toEndOf="parent"
         />
+    <include
+        layout="@layout/data_bottom_sheet"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+
         tools:context=".InfoActivity">
+
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/about_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="128dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="128dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
             android:text="ABOUT"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/privacy_button"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/textView17" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/privacy_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
 
-            android:layout_marginStart="128dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="128dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
             android:text="PRIVACY"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/about_button" />
+            app:layout_constraintStart_toEndOf="@+id/about_button"
+            app:layout_constraintTop_toBottomOf="@+id/textView17" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/disclaimer_button"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="128dp"
-
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="128dp"
+            android:backgroundTint="#1919d2"
+            android:layout_marginEnd="8dp"
             android:text="DISCLAIMER"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/privacy_button" />
+            app:layout_constraintStart_toEndOf="@id/copyright_button"
+            app:layout_constraintTop_toBottomOf="@id/privacy_button" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/copyright_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:backgroundTint="#1919d2"
 
 
-            android:layout_marginStart="128dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="128dp"
+
+            android:layout_marginEnd="8dp"
             android:text="COPYRIGHT"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/disclaimer_button"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/about_button" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/contact_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#18c2bf"
+            android:layout_marginEnd="8dp"
+            android:text="CONTACT"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/data_button"
             app:layout_constraintTop_toBottomOf="@+id/disclaimer_button" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/data_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:backgroundTint="#19c2bf"
 
-            android:layout_marginStart="128dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="128dp"
+
+            android:layout_marginEnd="8dp"
             android:text="DATA"
+            app:layout_constraintEnd_toStartOf="@id/contact_button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/copyright_button" />
+
+        <TextView
+            android:id="@+id/textView17"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="INFORMATION"
+            android:textColor="@android:color/black"
+            android:textSize="30sp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/copyright_button" />
+            app:layout_constraintTop_toTopOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

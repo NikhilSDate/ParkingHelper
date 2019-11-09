@@ -58,18 +58,21 @@
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/info_button"
         style="@style/CustomFABStyle"
-        android:elevation="8dp"
+        android:elevation="0dp"
+        app:elevation="8dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="top|right"
         android:layout_margin="16dp"
         app:borderWidth="0dp"
         app:fabSize="mini"
+
         app:srcCompat="@drawable/ic_info_outline_black_24dp" />
 
 
     <include
         layout="@layout/lot_info_bottom_sheet"
+
 
         app:layout_constraintEnd_toEndOf="parent" />
 
