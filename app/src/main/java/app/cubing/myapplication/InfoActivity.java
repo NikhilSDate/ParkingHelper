@@ -44,7 +44,7 @@ public class InfoActivity extends AppCompatActivity {
         aboutButton=findViewById(R.id.about_button);
         privacyButton=findViewById(R.id.privacy_button);
         disclaimerButton=findViewById(R.id.disclaimer_button);
-        helpButton =findViewById(R.id.copyright_button);
+        helpButton =findViewById(R.id.help_button);
         dataButton=findViewById(R.id.data_button);
         contactButton=findViewById(R.id.contact_button);
 

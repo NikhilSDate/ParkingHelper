@@ -2,11 +2,25 @@
     <string name="app_name">MumbaiParkingFinder</string>
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_info">InfoActivity</string>
+    <string name="help_text">Helpful quick tips:\n\nIf you do not see any parking lots around
+        you, pan around and zoom out until you see a lot.\n
+        The blue circle around a lot denotes a region of radius 500 meters around the lot.
+        Steep fines may apply if you park illegally within this zone.\n
+        Tap on or near the P sign to view details about a lot.\n
+        If you move within the blue circle around a lot, the circle will turn red. You will see
+        a warning notification. The border of the app will also turn bright red, and will stay red
+        while you are within 500 meters of the lot.
+    </string>
     <string name="about_text">
         Copyright @2019 all rights reserved\nNikhil Date
     </string>
 
-    <string name="privacy_text"></string>
+    <string name="privacy_text">This app asks for your geo location. It stores your location
+        locally, within the RAM memory of your device, only for the time that the app is running on
+        your device. This app does not ask for or store any kind of identifiable
+        information such as photos, name, age, gender etc.\n
+        This app does not ask for or store any financial information such as credit card or
+        bank account information etc.</string>
     <string name="disclaimer_text">
         By using this app you agree to accept the following
         Limitation of Liability and Disclaimer of Warranty:\n
@@ -27,7 +41,6 @@
         including but not limited to physical, mental, special, incidental,
         consequential, or other damages. This app is NOT endorsed by MCGM or BEST.
     </string>
-    <string name="help_text"></string>
     <string name="data_text">Contains data provided by Municipal Corporation of Greater Mumbai (MCGM) and Brihanmumbai Electric Supply Unit (BEST), and user submissions which may refer to privately operated public-parking facilities.\nMCGM and BEST operated lot data has been sourced from the MCGM website (data link provided on the Play store page)</string>
     <string name="no_parking_message">CAUTION!\nYou are within 500 meters
         of a public parking lot. STEEP FINES may apply for parking in

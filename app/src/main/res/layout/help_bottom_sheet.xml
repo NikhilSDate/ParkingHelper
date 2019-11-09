@@ -30,7 +30,7 @@
         android:layout_marginEnd="8dp"
         android:elevation="16dp"
         android:fontFamily="sans-serif"
-        android:text="COPYRIGHT"
+        android:text="HELP"
         android:textColor="@color/whiteColor"
         android:textSize="24sp"
         android:textStyle="bold"
