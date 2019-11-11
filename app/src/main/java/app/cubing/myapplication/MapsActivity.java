@@ -53,6 +53,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     MaterialButton directionsButton;
     boolean isFirstLocationChange;
     ArrayList<Circle> circlesArray;
+    ArrayList<Marker> parkingIconsArray;
     ImageView parkingAlert;
     FloatingActionButton infoButton;
 
@@ -223,6 +224,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 c.remove();
             }
         }
+        for(Marker m:parkingIconsArray){
+            if(m!=null){
+                m.remove();
+            }
+        }
         for(ParkingLot lot:DataHelper.getSingletonInstance().getParkingSpacesList()){
             if(Utils.getDistance(lot.getLocation(),currentLocation)<=500) {
                 Circle circle=map.addCircle(new CircleOptions().center(lot.getLocation()).radius(500).
@@ -240,8 +246,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
             Bitmap bitmap= BitmapFactory.decodeResource(getResources(),R.drawable.p_icon);
             Bitmap resizedBitmap=Utils.resizeBitmap(bitmap,0.25f);
-            map.addMarker(new MarkerOptions().position(lot.getLocation()).icon(BitmapDescriptorFactory.fromBitmap(resizedBitmap)).anchor(0.5f,0.5f));
-//            map.addCircle(new CircleOptions().center(lot.getLocation()).radius(16).fillColor(Color.parseColor("#ff4d4d")).strokeWidth(0));
+            Marker parkingIcon=map.addMarker(new MarkerOptions().position(lot.getLocation()).icon(BitmapDescriptorFactory.fromBitmap(resizedBitmap)).anchor(0.5f,0.5f));
+            parkingIconsArray.add(parkingIcon);
         }
     }
     public void showBottomSheet(ParkingLot currentLot){
