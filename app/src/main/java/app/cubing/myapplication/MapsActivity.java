@@ -74,6 +74,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
         isFirstLocationChange=true;
         circlesArray=new ArrayList<>();
+        parkingIconsArray=new ArrayList<>();
         Log.i("TAG",DataHelper.getSingletonInstance().getParkingSpacesList().toString());
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()

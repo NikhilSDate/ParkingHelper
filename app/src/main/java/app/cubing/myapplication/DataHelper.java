@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 public class DataHelper {
     private ArrayList<ParkingLot> parkingSpacesList=new ArrayList<ParkingLot>();
+    private ArrayList<BESTParkingLot> BESTParkingSpacesList=new ArrayList<>();
     private static DataHelper dataHelper=new DataHelper();
     public DataHelper(){}
     public static DataHelper getSingletonInstance(){
@@ -48,11 +49,38 @@ public class DataHelper {
         }catch (IOException ex){
 
         }
+        try{
+            InputStream inputStream=context.getResources().openRawResource(R.raw.best_parking_locations);
+            InputStreamReader inputStreamReader=new InputStreamReader(inputStream);
+            BufferedReader bufferedReader=new BufferedReader(inputStreamReader);
+            String line;
+            while((line=bufferedReader.readLine())!=null){
+                String[] tokens=line.split("~");
+                String gisId=tokens[0];
+                String ward=tokens[1];
+                String name=tokens[2];
+                LatLng location=new LatLng(Double.valueOf(tokens[3]), Double.valueOf(tokens[4]));
+                String address=tokens[5];
+                int subType = getSubTypeString(tokens[6]);
+                String operator=tokens[7];
+                int heavyVehicleCapacity=Integer.valueOf(tokens[8]);
+                int heavyVehicleNightCapacity=Integer.valueOf(tokens[9]);
+
+                BESTParkingLot bestParkingLot=new BESTParkingLot(gisId, ward, name, location,
+                        address, subType, operator, heavyVehicleCapacity, heavyVehicleNightCapacity);
+                BESTParkingSpacesList.add(bestParkingLot);
+            }
+        }catch(IOException ex){
+
+        }
 
     }
     public ArrayList<ParkingLot> getParkingSpacesList(){
         return parkingSpacesList;
 
+    }
+    public ArrayList<BESTParkingLot> getBESTParkingSpacesList(){
+        return BESTParkingSpacesList;
     }
     public static int getStructureTypeInt(String structureType){
         if(structureType.equals("MULTISTOREY")){
@@ -99,6 +127,15 @@ public class DataHelper {
             return "Free";
         }else{
             return "Paid";
+        }
+    }
+    public static int getSubTypeString(String subType){
+        if(subType.equals("DEPOT")){
+            return BESTParkingLot.DEPOT;
+        }else if(subType.equals("TERMINAL")){
+            return BESTParkingLot.TERMINAL;
+        }else{
+            return -1;
         }
     }
 
