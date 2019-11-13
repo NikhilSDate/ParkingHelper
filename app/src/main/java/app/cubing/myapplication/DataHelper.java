@@ -138,5 +138,14 @@ public class DataHelper {
             return -1;
         }
     }
+    public static String getSubTypeInt(int subType){
+        if(subType==BESTParkingLot.DEPOT){
+            return "DEPOT";
+        }else if(subType==BESTParkingLot.TERMINAL){
+            return "TERMINAL";
+        }else{
+            return "";
+        }
+    }
 
 }

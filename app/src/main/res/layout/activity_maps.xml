@@ -30,7 +30,6 @@
             android:layout_alignParentBottom="true"
             android:layout_gravity="bottom|end"
             android:layout_margin="16dp"
-            android:backgroundTint="@color/secondaryColor"
 
             android:insetTop="4dp"
             android:insetBottom="4dp"
@@ -40,7 +39,9 @@
             app:cornerRadius="32dp"
             app:icon="@drawable/ic_iconfinder_parking_2_753118"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
         <ImageView
             android:id="@+id/parking_alert"
             android:layout_width="match_parent"
@@ -74,6 +75,9 @@
         layout="@layout/lot_info_bottom_sheet"
 
 
+        app:layout_constraintEnd_toEndOf="parent" />
+    <include
+        layout="@layout/best_lot_info_bottom_sheet"
         app:layout_constraintEnd_toEndOf="parent" />
 
 

@@ -18,7 +18,17 @@ public class Utils {
                 finalLot=lot;
             }
         }
+
         return finalLot;
+    }
+    public static BESTParkingLot getClickedBESTLot(LatLng location){
+        BESTParkingLot finalLOT=null;
+        for(BESTParkingLot bestParkingLot:DataHelper.getSingletonInstance().getBESTParkingSpacesList()){
+            if(getDistance(location, bestParkingLot.getLocation())<50){
+                finalLOT=bestParkingLot;
+            }
+        }
+        return  finalLOT;
     }
     public static double getDistance(LatLng firstPoint,LatLng secondPoint){
         int radius=6371000;

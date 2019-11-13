@@ -19,6 +19,7 @@ import android.location.LocationManager;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.CalendarContract;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -48,12 +49,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     double currentLat;
     double currentLon;
     BottomSheetBehavior behavior;
+    BottomSheetBehavior bestBehavior;
     Marker currentMarker;
     MaterialButton checkButton;
     MaterialButton directionsButton;
+    MaterialButton bestDirectionsButton;
     boolean isFirstLocationChange;
     ArrayList<Circle> circlesArray;
     ArrayList<Marker> parkingIconsArray;
+    ArrayList<Marker> BESTParkingLocationsArray;
     ImageView parkingAlert;
     FloatingActionButton infoButton;
 
@@ -62,19 +66,26 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         ConstraintLayout bottomSheet=findViewById(R.id.bottom_sheet_layout);
+        ConstraintLayout bestBottomSheet=findViewById(R.id.best_bottom_sheet_layout);
         behavior=BottomSheetBehavior.from(bottomSheet);
+        bestBehavior=BottomSheetBehavior.from(bestBottomSheet);
+
         checkButton=findViewById(R.id.check_button);
         directionsButton=findViewById(R.id.directions_button);
+        bestDirectionsButton=findViewById(R.id.best_directions_button);
         infoButton=findViewById(R.id.info_button);
         parkingAlert=findViewById(R.id.parking_alert);
         parkingAlert.setVisibility(View.GONE);
-        checkButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#e0da28")));
         behavior.setPeekHeight(0);
         behavior.setHideable(true);
         behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+        bestBehavior.setPeekHeight(0);
+        bestBehavior.setHideable(true);
+        bestBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
         isFirstLocationChange=true;
         circlesArray=new ArrayList<>();
         parkingIconsArray=new ArrayList<>();
+        BESTParkingLocationsArray=new ArrayList<>();
         Log.i("TAG",DataHelper.getSingletonInstance().getParkingSpacesList().toString());
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -157,6 +168,26 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             }
         });
+        map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                final BESTParkingLot lot=Utils.getClickedBESTLot(marker.getPosition());
+                if(lot!=null){
+                    Log.i("TAG",lot.toString());
+                    showBestBottomSheet(lot);
+                    bestDirectionsButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Uri uri=Uri.parse("google.navigation:q="+String.valueOf(lot.getLocation().latitude)+","+String.valueOf(lot.getLocation().longitude));
+                            Intent intent=new Intent(Intent.ACTION_VIEW, uri);
+                            intent.setPackage("com.google.android.apps.maps");
+                            startActivity(intent);
+                        }
+                    });
+                }
+                return true;
+            }
+        });
     }
 
 
@@ -230,6 +261,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 m.remove();
             }
         }
+        for(Marker m:BESTParkingLocationsArray){
+            m.remove();
+        }
         for(ParkingLot lot:DataHelper.getSingletonInstance().getParkingSpacesList()){
             if(Utils.getDistance(lot.getLocation(),currentLocation)<=500) {
                 Circle circle=map.addCircle(new CircleOptions().center(lot.getLocation()).radius(500).
@@ -249,6 +283,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             Bitmap resizedBitmap=Utils.resizeBitmap(bitmap,0.25f);
             Marker parkingIcon=map.addMarker(new MarkerOptions().position(lot.getLocation()).icon(BitmapDescriptorFactory.fromBitmap(resizedBitmap)).anchor(0.5f,0.5f));
             parkingIconsArray.add(parkingIcon);
+        }
+        for(BESTParkingLot bestLot:DataHelper.getSingletonInstance().getBESTParkingSpacesList()){
+            Bitmap bitmap=BitmapFactory.decodeResource(getResources(), R.drawable.bus_icon);
+            Bitmap resizedBitmap=Utils.resizeBitmap(bitmap, 0.05f);
+            Marker BESTParkingIcon=map.addMarker(new MarkerOptions().position(bestLot.getLocation()).icon(BitmapDescriptorFactory.fromBitmap(resizedBitmap)).anchor(0.5f, 0.5f));
+            BESTParkingLocationsArray.add(BESTParkingIcon);
         }
     }
     public void showBottomSheet(ParkingLot currentLot){
@@ -273,6 +313,31 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         lotOperator.setText(currentLot.getOperator());
 
         behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+
+
+    }
+    public void showBestBottomSheet(BESTParkingLot lot){
+        TextView lotName=findViewById(R.id.best_lot_name);
+        TextView lotAddress=findViewById(R.id.best_lot_address);
+        TextView lot2wCapacity=findViewById(R.id.best_lot_2w_capacity);
+        TextView lotLMVCapacity=findViewById(R.id.best_lot_lmv_capacity);
+        TextView lotLCVCapacity=findViewById(R.id.best_lot_lcv_capacity);
+        TextView lotHMVCapacity=findViewById(R.id.best_lot_hmv_capacity);
+        TextView lotHMVNightCapacity=findViewById(R.id.best_lot_hmv_night_capacity);
+        TextView lotType=findViewById(R.id.best_lot_type);
+        TextView lotOperator=findViewById(R.id.best_lot_operator);
+
+        lotName.setText(lot.getName());
+        lotAddress.setText(lot.getAddress());
+        lot2wCapacity.setText("2W: ALLOWED");
+        lotLMVCapacity.setText("LMV: ALLOWED");
+        lotLCVCapacity.setText("LCV: ALLOWED");
+        lotHMVCapacity.setText("HMV: "+String.valueOf(lot.getHeavyVehicleCapacity()));
+        lotHMVNightCapacity.setText("HMV NIGHT: "+String.valueOf(lot.getGetHeavyVehicleNightCapacity()));
+        lotType.setText(DataHelper.getSubTypeInt(lot.getSubType()));
+        lotOperator.setText(lot.getOperator());
+        bestBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+
 
 
     }
