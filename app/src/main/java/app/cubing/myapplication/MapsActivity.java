@@ -145,50 +145,73 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
         updateCircles(new LatLng(currentLat, currentLon));
-        map.setOnCircleClickListener(new GoogleMap.OnCircleClickListener() {
+
+        map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
-            public void onCircleClick(Circle circle) {
-                LatLng latLng=circle.getCenter();
-                final ParkingLot clickedLot=Utils.getClickedLot(latLng);
-                if(clickedLot!=null) {
-                    showBottomSheet(clickedLot);
+            public boolean onMarkerClick(Marker marker) {
+                final BESTParkingLot lot = Utils.getClickedBESTLot(marker.getPosition());
+                final ParkingLot parkingLot;
+                if (lot != null) {
+                    Log.i("TAG", lot.toString());
+                    showBestBottomSheet(lot);
+                    bestDirectionsButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Uri uri = Uri.parse("google.navigation:q=" + String.valueOf(lot.getLocation().latitude) + "," + String.valueOf(lot.getLocation().longitude));
+                            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                            intent.setPackage("com.google.android.apps.maps");
+                            startActivity(intent);
+                        }
+                    });
+                } else if ((parkingLot = Utils.getClickedLot(marker.getPosition())) != null) {
+                    showBottomSheet(parkingLot);
                     directionsButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Uri mapIntentUri=Uri.parse("google.navigation:q="+clickedLot.getLocation().latitude+","+clickedLot.getLocation().longitude);
-                            Intent mapIntent=new Intent(Intent.ACTION_VIEW,mapIntentUri);
+                            Uri mapIntentUri = Uri.parse("google.navigation:q=" + parkingLot.getLocation().latitude + "," + parkingLot.getLocation().longitude);
+                            Intent mapIntent = new Intent(Intent.ACTION_VIEW, mapIntentUri);
                             mapIntent.setPackage("com.google.android.apps.maps");
                             startActivity(mapIntent);
 
                         }
                     });
-                }else{
+                } else {
                     behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
                 }
+                return true;
+
 
             }
         });
-        map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+        map.setOnCircleClickListener(new GoogleMap.OnCircleClickListener() {
             @Override
-            public boolean onMarkerClick(Marker marker) {
-                final BESTParkingLot lot=Utils.getClickedBESTLot(marker.getPosition());
-                if(lot!=null){
-                    Log.i("TAG",lot.toString());
-                    showBestBottomSheet(lot);
-                    bestDirectionsButton.setOnClickListener(new View.OnClickListener() {
+            public void onCircleClick(Circle circle) {
+                final ParkingLot lot = Utils.getClickedLot(circle.getCenter());
+                if (lot != null) {
+                    showBottomSheet(lot);
+                    directionsButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Uri uri=Uri.parse("google.navigation:q="+String.valueOf(lot.getLocation().latitude)+","+String.valueOf(lot.getLocation().longitude));
-                            Intent intent=new Intent(Intent.ACTION_VIEW, uri);
-                            intent.setPackage("com.google.android.apps.maps");
-                            startActivity(intent);
+                            Uri mapIntentUri = Uri.parse("google.navigation:q=" + lot.getLocation().latitude + "," + lot.getLocation().longitude);
+                            Intent mapIntent = new Intent(Intent.ACTION_VIEW, mapIntentUri);
+                            mapIntent.setPackage("com.google.android.apps.maps");
+                            startActivity(mapIntent);
+
                         }
                     });
+
                 }
-                return true;
             }
         });
     }
+
+
+
+
+
+
+
+
 
 
 

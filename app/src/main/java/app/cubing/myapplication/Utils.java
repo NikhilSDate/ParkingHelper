@@ -14,7 +14,7 @@ public class Utils {
     public static ParkingLot getClickedLot(LatLng latLng){
         ParkingLot finalLot=null;
         for(ParkingLot lot:DataHelper.getSingletonInstance().getParkingSpacesList()){
-            if(getDistance(latLng,lot.getLocation())<=400){
+            if(getDistance(latLng,lot.getLocation())<=300){
                 finalLot=lot;
             }
         }
