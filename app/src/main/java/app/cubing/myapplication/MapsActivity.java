@@ -9,6 +9,7 @@ import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
@@ -60,6 +61,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     ArrayList<Marker> BESTParkingLocationsArray;
     ImageView parkingAlert;
     FloatingActionButton infoButton;
+    boolean showBusLots;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +89,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         circlesArray=new ArrayList<>();
         parkingIconsArray=new ArrayList<>();
         BESTParkingLocationsArray=new ArrayList<>();
+        showBusLots=getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE).getBoolean("showBusLots", false);
+
         Log.i("TAG",DataHelper.getSingletonInstance().getParkingSpacesList().toString());
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -143,6 +148,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        Log.i("TAG", "MAP READY");
         map = googleMap;
         updateCircles(new LatLng(currentLat, currentLon));
 
@@ -207,17 +213,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
 
-
-
-
-
-
-
-
-
-
-
-
     @Override
     public void onLocationChanged(Location location) {
         currentLat=location.getLatitude();
@@ -247,6 +242,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        showBusLots=getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE).getBoolean("showBusLots", true);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);    }
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
@@ -274,45 +276,53 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
     public void updateCircles(LatLng currentLocation) {
-        for(Circle c:circlesArray){
-            if(c!=null) {
-                c.remove();
-            }
-        }
-        for(Marker m:parkingIconsArray){
-            if(m!=null){
+        for (Marker m : BESTParkingLocationsArray) {
+            if(m!=null) {
                 m.remove();
             }
         }
-        for(Marker m:BESTParkingLocationsArray){
-            m.remove();
+        for (Circle c : circlesArray) {
+            if (c != null) {
+                c.remove();
+            }
         }
-        for(ParkingLot lot:DataHelper.getSingletonInstance().getParkingSpacesList()){
-            if(Utils.getDistance(lot.getLocation(),currentLocation)<=500) {
-                Circle circle=map.addCircle(new CircleOptions().center(lot.getLocation()).radius(500).
+        for (Marker m : parkingIconsArray) {
+            if (m != null) {
+                m.remove();
+            }
+        }
+
+        for (ParkingLot lot : DataHelper.getSingletonInstance().getParkingSpacesList()) {
+            if (Utils.getDistance(lot.getLocation(), currentLocation) <= 500) {
+                Circle circle = map.addCircle(new CircleOptions().center(lot.getLocation()).radius(500).
                         strokeWidth(0).strokeColor(Color.parseColor("#50ff4d4d")).
                         fillColor(Color.parseColor("#50ff4d4d")));
                 circlesArray.add(circle);
                 circle.setClickable(true);
 
-            }else{
-                Circle circle=map.addCircle(new CircleOptions().center(lot.getLocation()).radius(500).
+            } else {
+                Circle circle = map.addCircle(new CircleOptions().center(lot.getLocation()).radius(500).
                         strokeWidth(0).strokeColor(Color.parseColor("#50ff4d4d")).
                         fillColor(Color.parseColor("#50009dff")));
                 circlesArray.add(circle);
                 circle.setClickable(true);
             }
-            Bitmap bitmap= BitmapFactory.decodeResource(getResources(),R.drawable.p_icon);
-            Bitmap resizedBitmap=Utils.resizeBitmap(bitmap,0.25f);
-            Marker parkingIcon=map.addMarker(new MarkerOptions().position(lot.getLocation()).icon(BitmapDescriptorFactory.fromBitmap(resizedBitmap)).anchor(0.5f,0.5f));
+            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.p_icon);
+            Bitmap resizedBitmap = Utils.resizeBitmap(bitmap, 0.25f);
+            Marker parkingIcon = map.addMarker(new MarkerOptions().position(lot.getLocation()).icon(BitmapDescriptorFactory.fromBitmap(resizedBitmap)).anchor(0.5f, 0.5f));
             parkingIconsArray.add(parkingIcon);
         }
-        for(BESTParkingLot bestLot:DataHelper.getSingletonInstance().getBESTParkingSpacesList()){
-            Bitmap bitmap=BitmapFactory.decodeResource(getResources(), R.drawable.bus_icon);
-            Bitmap resizedBitmap=Utils.resizeBitmap(bitmap, 0.05f);
-            Marker BESTParkingIcon=map.addMarker(new MarkerOptions().position(bestLot.getLocation()).icon(BitmapDescriptorFactory.fromBitmap(resizedBitmap)).anchor(0.5f, 0.5f));
-            BESTParkingLocationsArray.add(BESTParkingIcon);
+        if (showBusLots) {
+
+
+            for (BESTParkingLot bestLot : DataHelper.getSingletonInstance().getBESTParkingSpacesList()) {
+                Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.bus_icon);
+                Bitmap resizedBitmap = Utils.resizeBitmap(bitmap, 0.05f);
+                Marker BESTParkingIcon = map.addMarker(new MarkerOptions().position(bestLot.getLocation()).icon(BitmapDescriptorFactory.fromBitmap(resizedBitmap)).anchor(0.5f, 0.5f));
+                BESTParkingLocationsArray.add(BESTParkingIcon);
+            }
         }
+
     }
     public void showBottomSheet(ParkingLot currentLot){
         TextView lotName=findViewById(R.id.lot_name);
