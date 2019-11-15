@@ -116,8 +116,8 @@ public class InfoActivity extends AppCompatActivity {
                 Intent mailIntent=new Intent(Intent.ACTION_SENDTO);
                 mailIntent.setData(Uri.parse("mailto:"));
                 mailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"mumbaiparkinghelper@gmail.com"});
-                mailIntent.putExtra(Intent.EXTRA_SUBJECT, "I have come across the following public parking lot which I think is not shown in your app:");
-                mailIntent.putExtra(Intent.EXTRA_TEXT, "Address of parking lot");
+                mailIntent.putExtra(Intent.EXTRA_SUBJECT, "Request to add new parking lot");
+                mailIntent.putExtra(Intent.EXTRA_TEXT, "I have come across the following public parking lot which I think is not shown in your app:\n<Address of parking lot>");
                 startActivity(mailIntent);
 
             }
