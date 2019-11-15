@@ -22,8 +22,10 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.Location;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.CalendarContract;
 import android.util.Log;
 import android.view.View;
@@ -68,6 +70,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     ImageView parkingAlert;
     FloatingActionButton infoButton;
     boolean showBusLots;
+    SupportMapFragment mapFragment;
 
 
     @Override
@@ -99,7 +102,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         Log.i("TAG",DataHelper.getSingletonInstance().getParkingSpacesList().toString());
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+        mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         getPermissions();
@@ -158,6 +161,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Log.i("TAG", "MAP READY");
         map = googleMap;
         updateCircles(new LatLng(currentLat, currentLon));
+        showBestLots();
 
         map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
@@ -253,9 +257,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onResume() {
         super.onResume();
         showBusLots=getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE).getBoolean("showBusLots", true);
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);    }
+//        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+//                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+    }
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
@@ -315,11 +320,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
     public void updateCircles(LatLng currentLocation) {
-        for (Marker m : BESTParkingLocationsArray) {
-            if(m!=null) {
-                m.remove();
-            }
-        }
+
         for (Circle c : circlesArray) {
             if (c != null) {
                 c.remove();
@@ -351,9 +352,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             Marker parkingIcon = map.addMarker(new MarkerOptions().position(lot.getLocation()).icon(BitmapDescriptorFactory.fromBitmap(resizedBitmap)).anchor(0.5f, 0.5f));
             parkingIconsArray.add(parkingIcon);
         }
+
+
+    }
+    public void showBestLots(){
+        for (Marker m : BESTParkingLocationsArray) {
+            if(m!=null) {
+                m.remove();
+            }
+        }
         if (showBusLots) {
-
-
             for (BESTParkingLot bestLot : DataHelper.getSingletonInstance().getBESTParkingSpacesList()) {
                 Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.bus_icon);
                 Bitmap resizedBitmap = Utils.resizeBitmap(bitmap, 0.05f);
@@ -361,7 +369,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 BESTParkingLocationsArray.add(BESTParkingIcon);
             }
         }
-
     }
     public void showBottomSheet(ParkingLot currentLot){
         TextView lotName=findViewById(R.id.lot_name);
@@ -413,6 +420,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
     }
+
+
 
 
 
