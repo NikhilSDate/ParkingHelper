@@ -295,7 +295,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)!= PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},0);
-            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},0);
             AlertDialog.Builder builder=new AlertDialog.Builder(this);
             builder.setTitle("Restart the application?");
             builder.setMessage("Enabling location-based features requires a restart of the application");
