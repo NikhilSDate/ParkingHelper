@@ -1,13 +1,16 @@
 package app.cubing.myapplication;
 
+
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -19,6 +22,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.Location;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.util.Log;
@@ -26,6 +30,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -45,6 +50,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener {
+
 
     private GoogleMap map;
     double currentLat;
@@ -89,7 +95,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         circlesArray=new ArrayList<>();
         parkingIconsArray=new ArrayList<>();
         BESTParkingLocationsArray=new ArrayList<>();
-        showBusLots=getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE).getBoolean("showBusLots", false);
+        showBusLots=getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE).getBoolean("showBusLots", true);
 
         Log.i("TAG",DataHelper.getSingletonInstance().getParkingSpacesList().toString());
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -97,7 +103,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         getPermissions();
-        
+
+
 
         LocationManager manager=(LocationManager)getSystemService(Context.LOCATION_SERVICE);
 
@@ -267,11 +274,44 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void getPermissions(){
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},0);
+            AlertDialog.Builder builder=new AlertDialog.Builder(this);
+            builder.setTitle("Restart the application?");
+            builder.setMessage("Enabling location-based features requires a restart of the application");
+            builder.setPositiveButton("RESTART", new DialogInterface.OnClickListener(){
+                @Override
+                public void onClick(DialogInterface dialog, int which ){
+                    Intent i = new Intent(MapsActivity.this, SplashActivity.class);
+                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(i);
+                    finish();
+
+                }
+
+            });
+            AlertDialog dialog=builder.create();
+            dialog.show();
+
 
         }
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)!= PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},0);
+            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},0);
+            AlertDialog.Builder builder=new AlertDialog.Builder(this);
+            builder.setTitle("Restart the application?");
+            builder.setMessage("Enabling location-based features requires a restart of the application");
+            builder.setPositiveButton("RESTART", new DialogInterface.OnClickListener(){
+                @Override
+                public void onClick(DialogInterface dialog, int which ){
+                    Intent i = getBaseContext().getPackageManager().getLaunchIntentForPackage(getBaseContext().getPackageName());
+                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(i);
+                    finish();
 
+                }
+
+            });
+            AlertDialog dialog=builder.create();
+            dialog.show();
         }
 
     }
@@ -374,5 +414,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
     }
+
+
 
 }
