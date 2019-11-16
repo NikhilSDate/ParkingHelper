@@ -18,5 +18,9 @@
         <item name="backgroundTint">@color/primaryColor</item>
         <item name="tint">@color/whiteColor</item>
     </style>
+    <style name="LocationFABStyle" parent="Widget.Design.FloatingActionButton">
+        <item name="backgroundTint">@color/whiteColor</item>
+        <item name="tint">@color/secondaryColor</item>
+    </style>
 
 </resources>

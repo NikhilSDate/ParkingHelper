@@ -29,6 +29,7 @@ import android.os.Handler;
 import android.provider.CalendarContract;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -69,6 +70,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     ArrayList<Marker> BESTParkingLocationsArray;
     ImageView parkingAlert;
     FloatingActionButton infoButton;
+    FloatingActionButton locationCenterButton;
     boolean showBusLots;
     SupportMapFragment mapFragment;
 
@@ -77,12 +79,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
+
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
         ConstraintLayout bottomSheet=findViewById(R.id.bottom_sheet_layout);
         ConstraintLayout bestBottomSheet=findViewById(R.id.best_bottom_sheet_layout);
         behavior=BottomSheetBehavior.from(bottomSheet);
         bestBehavior=BottomSheetBehavior.from(bestBottomSheet);
 
         checkButton=findViewById(R.id.check_button);
+        locationCenterButton =findViewById(R.id.location_center_fab);
         directionsButton=findViewById(R.id.directions_button);
         bestDirectionsButton=findViewById(R.id.best_directions_button);
         infoButton=findViewById(R.id.info_button);
@@ -140,6 +147,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onClick(View v) {
                 Intent intent=new Intent(MapsActivity.this, InfoActivity.class);
                 startActivity(intent);
+
+            }
+        });
+        locationCenterButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                map.animateCamera(CameraUpdateFactory.newLatLng(new LatLng(currentLat, currentLon)));
 
             }
         });

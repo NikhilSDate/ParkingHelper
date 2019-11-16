@@ -30,30 +30,43 @@
             android:layout_alignParentBottom="true"
             android:layout_gravity="bottom|end"
             android:layout_margin="16dp"
-
+            android:backgroundTint="@color/secondaryColor"
+            android:elevation="16dp"
             android:insetTop="4dp"
             android:insetBottom="4dp"
             android:text="Find Public Parking"
             android:textSize="18sp"
-            android:elevation="16dp"
             app:cornerRadius="32dp"
             app:icon="@drawable/ic_iconfinder_parking_2_753118"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            />
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <ImageView
             android:id="@+id/parking_alert"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:src="@drawable/alert_border"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0" />
 
-
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/location_center_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            app:backgroundTint="@color/whiteColor"
+            android:tint="@color/secondaryColor"
+            app:borderWidth="0dp"
+            android:clickable="true"
+            android:focusable="true"
+            app:rippleColor="#DFDFDF"
+            app:srcCompat="@drawable/ic_my_location_black_24dp"
+            app:layout_constraintBottom_toTopOf="@+id/check_button"
+            app:layout_constraintEnd_toEndOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -71,6 +84,7 @@
         app:fabSize="mini"
 
         app:srcCompat="@drawable/ic_info_outline_black_24dp" />
+
 
 
     <include
