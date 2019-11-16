@@ -135,8 +135,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                LatLngBounds.Builder builder=new LatLngBounds.Builder();
                LatLng nearestLotLocation=Utils.getNearestLot(new LatLng(currentLat,currentLon)).getLocation();
                 LatLng center =map.getCameraPosition().target;
+                double paddedLatitude;
+                double paddedLongitude;
+                if(center.latitude>nearestLotLocation.latitude){
+                    paddedLatitude=nearestLotLocation.latitude-0.001;
+                }else{
+                    paddedLatitude=nearestLotLocation.latitude+0.001;
+                }
+                if(center.longitude>nearestLotLocation.longitude){
+                    paddedLongitude=nearestLotLocation.longitude-0.001;
+                }else{
+                    paddedLongitude=nearestLotLocation.longitude+0.001;
+                }
+                LatLng paddedLotLocation=new LatLng(paddedLatitude, paddedLongitude);
                 LatLng lotLocationOpposite=new LatLng(2*center.latitude-nearestLotLocation.latitude,2*center.longitude-nearestLotLocation.longitude);
-                builder.include(nearestLotLocation);
+                builder.include(paddedLotLocation);
                 builder.include(lotLocationOpposite);
                 LatLngBounds mapBounds=builder.build();
                 map.animateCamera(CameraUpdateFactory.newLatLngBounds(mapBounds,10));

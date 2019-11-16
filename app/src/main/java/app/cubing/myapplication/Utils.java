@@ -53,16 +53,8 @@ public class Utils {
         return bitmap;
 
     }
-    public static boolean isAtLeastOneLotVisible(LatLngBounds bounds){
-        boolean isAtLeastOneLotVisible=false;
-        for(ParkingLot lot:DataHelper.getSingletonInstance().getParkingSpacesList()) {
-            if(bounds.contains(lot.getLocation())){
-                isAtLeastOneLotVisible=true;
-            }
 
-        }
-        return isAtLeastOneLotVisible;
-    }
+
     public static ParkingLot getNearestLot(LatLng location){
         ParkingLot nearestLot=DataHelper.getSingletonInstance().getParkingSpacesList().get(0);
         for(ParkingLot lot:DataHelper.getSingletonInstance().getParkingSpacesList()){
