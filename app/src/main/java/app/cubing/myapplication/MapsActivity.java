@@ -290,6 +290,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     @Override
+    public void onBackPressed() {
+        if(behavior.getState()==BottomSheetBehavior.STATE_EXPANDED||bestBehavior.getState()==BottomSheetBehavior.STATE_EXPANDED){
+            behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            bestBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        }else{
+            super.onBackPressed();
+        }
+
+
+    }
+
+    @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
 
     }
