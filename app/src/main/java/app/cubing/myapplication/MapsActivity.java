@@ -365,11 +365,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 c.remove();
             }
         }
+        circlesArray.clear();
         for (Marker m : parkingIconsArray) {
             if (m != null) {
                 m.remove();
             }
         }
+        parkingIconsArray.clear();
 
         for (ParkingLot lot : DataHelper.getSingletonInstance().getParkingSpacesList()) {
             if (Utils.getDistance(lot.getLocation(), currentLocation) <= 500) {
@@ -400,6 +402,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 m.remove();
             }
         }
+        BESTParkingLocationsArray.clear();
         if (showBusLots) {
             for (BESTParkingLot bestLot : DataHelper.getSingletonInstance().getBESTParkingSpacesList()) {
                 Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.bus_icon);
