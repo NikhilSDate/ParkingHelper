@@ -48,9 +48,11 @@ public class DataHelper {
                 int lightFourWheelerCapacity=Integer.valueOf(tokens[12]);
                 int lightCommercialFourWheelerCapacity=Integer.valueOf(tokens[13]);
                 int heavyFourWheelerCapacity=Integer.valueOf(tokens[14]);
+                Bitmap icon = Utils.resizeBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.p_icon),0.25f);
+
                 ParkingLot lot=new ParkingLot(gisId,ward,name,location,address,structureType,access,
                         operator,isFreeParking,priceCategory,twoWheelerCapacity,lightFourWheelerCapacity,
-                        lightCommercialFourWheelerCapacity,heavyFourWheelerCapacity);
+                        lightCommercialFourWheelerCapacity,heavyFourWheelerCapacity,icon);
                 parkingSpacesList.add(lot);
 
             }

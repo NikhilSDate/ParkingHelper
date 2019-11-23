@@ -123,7 +123,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }catch (SecurityException ex){
             Log.e("TAG", ex.getMessage());
             ex.printStackTrace();
-            throw new RuntimeException(ex);
         }
         checkButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -404,9 +403,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         parkingIconsArray.clear();
         for (ParkingLot lot : DataHelper.getSingletonInstance().getParkingSpacesList()) {
-            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.p_icon);
-            Bitmap resizedBitmap = Utils.resizeBitmap(bitmap, 0.25f);
-            Marker parkingIcon = map.addMarker(new MarkerOptions().position(lot.getLocation()).icon(BitmapDescriptorFactory.fromBitmap(resizedBitmap)).anchor(0.5f, 0.5f));
+
+            Marker parkingIcon = map.addMarker(new MarkerOptions().position(lot.getLocation()).icon(BitmapDescriptorFactory.fromBitmap(lot.getIcon())).anchor(0.5f, 0.5f));
             parkingIconsArray.add(parkingIcon);
         }
 

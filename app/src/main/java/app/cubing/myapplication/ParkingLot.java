@@ -1,5 +1,7 @@
 package app.cubing.myapplication;
 
+import android.graphics.Bitmap;
+
 import com.google.android.gms.maps.model.LatLng;
 
 public class ParkingLot {
@@ -23,12 +25,18 @@ public class ParkingLot {
     private int lightCommercialFourWheelerCapacity;
     private int heavyVehicleCapacity;
 
+    public Bitmap getIcon() {
+        return icon;
+    }
+
+    private Bitmap icon;
+
 
 
     public ParkingLot(String gisId, String ward, String name, LatLng location, String address,
                       int structureType, int accessType, String operator, boolean isFreeParking, char priceCategory,
                       int twoWheelerCapacity, int lightFourWheelerCapacity, int lightCommercialFourWheelerCapacity
-                              , int heavyFourWheelerCapacity) {
+                              , int heavyFourWheelerCapacity,Bitmap icon) {
         this.gisId = gisId;
         this.ward = ward;
         this.name = name;
@@ -43,6 +51,7 @@ public class ParkingLot {
         this.lightFourWheelerCapacity = lightFourWheelerCapacity;
         this.lightCommercialFourWheelerCapacity=lightCommercialFourWheelerCapacity;
         this.heavyVehicleCapacity = heavyFourWheelerCapacity;
+        this.icon=icon;
     }
     @Override
     public String toString() {
