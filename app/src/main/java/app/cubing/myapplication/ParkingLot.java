@@ -3,7 +3,7 @@ package app.cubing.myapplication;
 import com.google.android.gms.maps.model.LatLng;
 
 public class ParkingLot {
-    public static final int MULTISTOREY=0;
+    public static final int MULTI_STOREY=0;
     public static final int UNDERGROUND=1;
     public static final int RAMP=3;
     public static final int ELEVATOR=4;

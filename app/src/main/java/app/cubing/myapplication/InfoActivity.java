@@ -30,8 +30,6 @@ public class InfoActivity extends AppCompatActivity {
     MaterialButton contactButton;
     SwitchCompat busLotsSwitch;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,7 +45,6 @@ public class InfoActivity extends AppCompatActivity {
         disclaimerBehavior=BottomSheetBehavior.from(disclaimerLayout);
         helpBehavior=BottomSheetBehavior.from(helpLayout);
         dataBehavior=BottomSheetBehavior.from(dataLayout);
-
 
         aboutButton=findViewById(R.id.about_button);
         privacyButton=findViewById(R.id.privacy_button);
@@ -115,9 +112,9 @@ public class InfoActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent mailIntent=new Intent(Intent.ACTION_SENDTO);
                 mailIntent.setData(Uri.parse("mailto:"));
-                mailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"mumbaiparkinghelper@gmail.com"});
-                mailIntent.putExtra(Intent.EXTRA_SUBJECT, "Request to add new parking lot");
-                mailIntent.putExtra(Intent.EXTRA_TEXT, "I have come across the following public parking lot which I think is not shown in your app:\n<Address of parking lot>");
+                mailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{getResources().getString(R.string.contact_email)});
+                mailIntent.putExtra(Intent.EXTRA_SUBJECT, getResources().getString(R.string.contact_email_subject));
+                mailIntent.putExtra(Intent.EXTRA_TEXT, getResources().getString(R.string.contact_email_body));
                 startActivity(mailIntent);
 
             }
@@ -125,7 +122,6 @@ public class InfoActivity extends AppCompatActivity {
         busLotsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
                 if(isChecked){
                     Context context=InfoActivity.this;
                     SharedPreferences preferences=context.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);

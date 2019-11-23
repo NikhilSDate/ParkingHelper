@@ -1,13 +1,13 @@
 package app.cubing.myapplication;
 
+import android.graphics.Bitmap;
+
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.LatLng;
-
-
 
 public class BESTParkingLot {
     public static final int DEPOT=0;
     public static final int TERMINAL=1;
-
 
     private String gisId;
     private String ward;
@@ -18,9 +18,10 @@ public class BESTParkingLot {
     private String operator;
     private int heavyVehicleCapacity;
     private int getHeavyVehicleNightCapacity;
+    Bitmap icon;
 
     public BESTParkingLot(String gisId, String ward, String name, LatLng location, String address,
-                          int subType, String operator, int heavyVehicleCapacity, int getHeavyVehicleNightCapacity) {
+                          int subType, String operator, int heavyVehicleCapacity, int getHeavyVehicleNightCapacity, Bitmap icon) {
         this.gisId = gisId;
         this.ward = ward;
         this.name = name;
@@ -30,6 +31,7 @@ public class BESTParkingLot {
         this.operator = operator;
         this.heavyVehicleCapacity = heavyVehicleCapacity;
         this.getHeavyVehicleNightCapacity = getHeavyVehicleNightCapacity;
+        this.icon=icon;
     }
 
     public String getGisId() {
@@ -66,6 +68,10 @@ public class BESTParkingLot {
 
     public int getGetHeavyVehicleNightCapacity() {
         return getHeavyVehicleNightCapacity;
+    }
+
+    public Bitmap getIcon() {
+        return icon;
     }
 
     @Override

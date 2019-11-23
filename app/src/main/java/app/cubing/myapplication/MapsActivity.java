@@ -8,25 +8,17 @@ import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.Location;
 import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.provider.CalendarContract;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -39,6 +31,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
@@ -54,6 +47,7 @@ import java.util.ArrayList;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener {
 
+    private BitmapDescriptor CURRENT_LOCATION_BITMAP;
 
     private GoogleMap map;
     double currentLat;
@@ -79,7 +73,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
@@ -107,26 +100,30 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         BESTParkingLocationsArray=new ArrayList<>();
         showBusLots=getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE).getBoolean("showBusLots", true);
 
-        Log.i("TAG",DataHelper.getSingletonInstance().getParkingSpacesList().toString());
+        if (Utils.DEV_BUILD) {
+            Log.d("TAG", DataHelper.getSingletonInstance().getParkingSpacesList().toString());
+        }
+
+        CURRENT_LOCATION_BITMAP = BitmapDescriptorFactory.fromBitmap(Utils.getBitmapFromResource(R.drawable.location_dot,this));
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         getPermissions();
 
-
-
         LocationManager manager=(LocationManager)getSystemService(Context.LOCATION_SERVICE);
 
         try {
             manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 500, 1, this);
             manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 500, 1, this);
-
-            Log.i("TAG","GOT LOCATION");
+            if (Utils.DEV_BUILD) {
+                Log.i("TAG", "GOT LOCATION");
+            }
         }catch (SecurityException ex){
-            Log.i("TAG","EXCEPTION");
+            Log.e("TAG", ex.getMessage());
             ex.printStackTrace();
-
+            throw new RuntimeException(ex);
         }
         checkButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -148,7 +145,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     paddedLongitude=nearestLotLocation.longitude+0.001;
                 }
                 LatLng paddedLotLocation=new LatLng(paddedLatitude, paddedLongitude);
-                LatLng lotLocationOpposite=new LatLng(2*center.latitude-nearestLotLocation.latitude,2*center.longitude-nearestLotLocation.longitude);
+                LatLng lotLocationOpposite=new LatLng(2*center.latitude-paddedLatitude,2*center.longitude-paddedLongitude);
                 builder.include(paddedLotLocation);
                 builder.include(lotLocationOpposite);
                 LatLngBounds mapBounds=builder.build();
@@ -160,7 +157,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onClick(View v) {
                 Intent intent=new Intent(MapsActivity.this, InfoActivity.class);
                 startActivity(intent);
-
             }
         });
         locationCenterButton.setOnClickListener(new View.OnClickListener(){
@@ -170,7 +166,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             }
         });
-
     }
 
 
@@ -185,10 +180,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        Log.i("TAG", "MAP READY");
+        if(Utils.DEV_BUILD) {
+            Log.d("TAG", "MAP READY");
+        }
         map = googleMap;
         updateCircles(new LatLng(currentLat, currentLon));
         showBestLots();
+        showParkingIcons();
 
         map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
@@ -196,8 +194,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 final BESTParkingLot lot = Utils.getClickedBESTLot(marker.getPosition());
                 final ParkingLot parkingLot;
                 if (lot != null) {
-                    Log.i("TAG", lot.toString());
-                    showBestBottomSheet(lot);
+                    if (Utils.DEV_BUILD) {
+                        Log.d("TAG", lot.toString());
+                    }
+                    showBESTBottomSheet(lot);
                     bestDirectionsButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -216,15 +216,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             Intent mapIntent = new Intent(Intent.ACTION_VIEW, mapIntentUri);
                             mapIntent.setPackage("com.google.android.apps.maps");
                             startActivity(mapIntent);
-
                         }
                     });
                 } else {
                     behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
                 }
                 return true;
-
-
             }
         });
         map.setOnCircleClickListener(new GoogleMap.OnCircleClickListener() {
@@ -240,15 +237,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             Intent mapIntent = new Intent(Intent.ACTION_VIEW, mapIntentUri);
                             mapIntent.setPackage("com.google.android.apps.maps");
                             startActivity(mapIntent);
-
                         }
                     });
-
                 }
             }
         });
     }
-
 
 
     @Override
@@ -259,15 +253,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             currentMarker.remove();
         }
         updateCircles(new LatLng(currentLat,currentLon));
-        Log.i("TAG","lat:"+currentLat+"lon:"+currentLon);
+        if (Utils.DEV_BUILD) {
+            Log.d("TAG", "lat:" + currentLat + "lon:" + currentLon);
+        }
         LatLng current = new LatLng(currentLat, currentLon);
-        Bitmap bitmap=Utils.getBitmapFromResource(R.drawable.location_dot,this);
-        currentMarker=map.addMarker(new MarkerOptions().position(current).icon(BitmapDescriptorFactory.fromBitmap(bitmap)));
+        currentMarker=map.addMarker(new MarkerOptions().position(current).icon(CURRENT_LOCATION_BITMAP));
         if(isFirstLocationChange) {
             map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLat, currentLon), 15));
             isFirstLocationChange=false;
         }
-        if((Utils.isinNoParking(new LatLng(currentLat,currentLon)))){
+        if((Utils.isInNoParking(new LatLng(currentLat,currentLon)))){
             parkingAlert.setVisibility(View.VISIBLE);
             Toast.makeText(this, R.string.no_parking_message,Toast.LENGTH_LONG).show();
 
@@ -319,8 +314,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},0);
             AlertDialog.Builder builder=new AlertDialog.Builder(this);
-            builder.setTitle("Restart the application?");
-            builder.setMessage("Enabling location-based features requires a restart of the application");
+            builder.setTitle(R.string.app_restart_message_title);
+            builder.setMessage(R.string.app_restart_message_body);
             builder.setPositiveButton("RESTART", new DialogInterface.OnClickListener(){
                 @Override
                 public void onClick(DialogInterface dialog, int which ){
@@ -340,8 +335,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)!= PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},0);
             AlertDialog.Builder builder=new AlertDialog.Builder(this);
-            builder.setTitle("Restart the application?");
-            builder.setMessage("Enabling location-based features requires a restart of the application");
+            builder.setTitle(R.string.app_restart_message_title);
+            builder.setMessage(R.string.app_restart_message_body);
             builder.setPositiveButton("RESTART", new DialogInterface.OnClickListener(){
                 @Override
                 public void onClick(DialogInterface dialog, int which ){
@@ -366,32 +361,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         }
         circlesArray.clear();
-        for (Marker m : parkingIconsArray) {
-            if (m != null) {
-                m.remove();
-            }
-        }
-        parkingIconsArray.clear();
+
 
         for (ParkingLot lot : DataHelper.getSingletonInstance().getParkingSpacesList()) {
-            if (Utils.getDistance(lot.getLocation(), currentLocation) <= 500) {
-                Circle circle = map.addCircle(new CircleOptions().center(lot.getLocation()).radius(500).
-                        strokeWidth(0).strokeColor(Color.parseColor("#50ff4d4d")).
-                        fillColor(Color.parseColor("#50ff4d4d")));
+            if (Utils.getDistance(lot.getLocation(), currentLocation) <= Utils.WARNING_RADIUS) {
+                Circle circle = map.addCircle(new CircleOptions().center(lot.getLocation()).radius(Utils.WARNING_RADIUS).
+                        strokeWidth(0).fillColor(Utils.WARNING_CIRCLE_FILL_RED));
                 circlesArray.add(circle);
                 circle.setClickable(true);
 
             } else {
                 Circle circle = map.addCircle(new CircleOptions().center(lot.getLocation()).radius(500).
-                        strokeWidth(0).strokeColor(Color.parseColor("#50ff4d4d")).
-                        fillColor(Color.parseColor("#50009dff")));
+                        strokeWidth(0).fillColor(Utils.WARNING_CIRCLE_FILL_BLUE));
                 circlesArray.add(circle);
                 circle.setClickable(true);
             }
-            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.p_icon);
-            Bitmap resizedBitmap = Utils.resizeBitmap(bitmap, 0.25f);
-            Marker parkingIcon = map.addMarker(new MarkerOptions().position(lot.getLocation()).icon(BitmapDescriptorFactory.fromBitmap(resizedBitmap)).anchor(0.5f, 0.5f));
-            parkingIconsArray.add(parkingIcon);
+
         }
 
 
@@ -405,12 +390,27 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         BESTParkingLocationsArray.clear();
         if (showBusLots) {
             for (BESTParkingLot bestLot : DataHelper.getSingletonInstance().getBESTParkingSpacesList()) {
-                Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.bus_icon);
-                Bitmap resizedBitmap = Utils.resizeBitmap(bitmap, 0.05f);
-                Marker BESTParkingIcon = map.addMarker(new MarkerOptions().position(bestLot.getLocation()).icon(BitmapDescriptorFactory.fromBitmap(resizedBitmap)).anchor(0.5f, 0.5f));
+
+                Marker BESTParkingIcon = map.addMarker(new MarkerOptions().position(bestLot.getLocation()).icon(BitmapDescriptorFactory.fromBitmap(bestLot.getIcon())).anchor(0.5f, 0.5f));
                 BESTParkingLocationsArray.add(BESTParkingIcon);
             }
         }
+    }
+    public void showParkingIcons(){
+        for (Marker m : parkingIconsArray) {
+            if (m != null) {
+                m.remove();
+            }
+        }
+        parkingIconsArray.clear();
+        for (ParkingLot lot : DataHelper.getSingletonInstance().getParkingSpacesList()) {
+            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.p_icon);
+            Bitmap resizedBitmap = Utils.resizeBitmap(bitmap, 0.25f);
+            Marker parkingIcon = map.addMarker(new MarkerOptions().position(lot.getLocation()).icon(BitmapDescriptorFactory.fromBitmap(resizedBitmap)).anchor(0.5f, 0.5f));
+            parkingIconsArray.add(parkingIcon);
+        }
+
+
     }
     public void showBottomSheet(ParkingLot currentLot){
         TextView lotName=findViewById(R.id.lot_name);
@@ -434,10 +434,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         lotOperator.setText(currentLot.getOperator());
 
         behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-
-
     }
-    public void showBestBottomSheet(BESTParkingLot lot){
+
+    public void showBESTBottomSheet(BESTParkingLot lot){
         TextView lotName=findViewById(R.id.best_lot_name);
         TextView lotAddress=findViewById(R.id.best_lot_address);
         TextView lot2wCapacity=findViewById(R.id.best_lot_2w_capacity);
@@ -458,13 +457,5 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         lotType.setText(DataHelper.getSubTypeInt(lot.getSubType()));
         lotOperator.setText(lot.getOperator());
         bestBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-
-
-
     }
-
-
-
-
-
 }

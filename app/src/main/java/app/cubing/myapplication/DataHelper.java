@@ -1,7 +1,11 @@
 package app.cubing.myapplication;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.BufferedReader;
@@ -14,11 +18,15 @@ public class DataHelper {
     private ArrayList<ParkingLot> parkingSpacesList=new ArrayList<ParkingLot>();
     private ArrayList<BESTParkingLot> BESTParkingSpacesList=new ArrayList<>();
     private static DataHelper dataHelper=new DataHelper();
-    public DataHelper(){}
+
+
+    private DataHelper(){}
+
     public static DataHelper getSingletonInstance(){
         return dataHelper;
     }
-    public void loadData(Context context){
+
+    public void loadData(Context context) throws IOException {
         try {
             InputStream inputStream = context.getResources().openRawResource(R.raw.parking_locations);
             InputStreamReader reader = new InputStreamReader(inputStream);
@@ -47,7 +55,7 @@ public class DataHelper {
 
             }
         }catch (IOException ex){
-
+            throw ex;
         }
         try{
             InputStream inputStream=context.getResources().openRawResource(R.raw.best_parking_locations);
@@ -65,13 +73,16 @@ public class DataHelper {
                 String operator=tokens[7];
                 int heavyVehicleCapacity=Integer.valueOf(tokens[8]);
                 int heavyVehicleNightCapacity=Integer.valueOf(tokens[9]);
+                Bitmap icon= Utils.resizeBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.bus_icon),0.05f);
+
+
 
                 BESTParkingLot bestParkingLot=new BESTParkingLot(gisId, ward, name, location,
-                        address, subType, operator, heavyVehicleCapacity, heavyVehicleNightCapacity);
+                        address, subType, operator, heavyVehicleCapacity, heavyVehicleNightCapacity,icon);
                 BESTParkingSpacesList.add(bestParkingLot);
             }
         }catch(IOException ex){
-
+            throw ex;
         }
 
     }
@@ -83,8 +94,8 @@ public class DataHelper {
         return BESTParkingSpacesList;
     }
     public static int getStructureTypeInt(String structureType){
-        if(structureType.equals("MULTISTOREY")){
-            return ParkingLot.MULTISTOREY;
+        if(structureType.equals("MULTI_STOREY")){
+            return ParkingLot.MULTI_STOREY;
         }else if(structureType.equals("UNDERGROUND")){
             return ParkingLot.UNDERGROUND;
         }else{
@@ -103,7 +114,7 @@ public class DataHelper {
 
     }
     public static String getStructureTypeString(int structureType){
-        if(structureType==ParkingLot.MULTISTOREY){
+        if(structureType==ParkingLot.MULTI_STOREY){
             return "Multistorey";
         }else if(structureType==ParkingLot.UNDERGROUND){
             return "Underground";

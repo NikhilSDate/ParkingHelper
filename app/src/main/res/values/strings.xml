@@ -45,5 +45,11 @@
     <string name="no_parking_message">CAUTION!\nYou are within 500 meters
         of a public parking lot. STEEP FINES may apply for parking in
         no-parking zones.</string>
+    <string name="contact_email">mumbaiparkinghelper@gmail.com</string>
+    <string name="contact_email_subject">Request to add new parking lot</string>
+    <string name="contact_email_body">I have come across the following public parking lot which I think is not shown in your app:\n
+(Type address of parking lot here)</string>
+    <string name="app_restart_message_title">Restart the application</string>
+    <string name="app_restart_message_body">Enabling location-based features requires a restart of the application</string>
     <string name="preference_file_key">settings</string>
 </resources>

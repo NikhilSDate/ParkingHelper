@@ -3,13 +3,21 @@ package app.cubing.myapplication;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
+
+import java.util.ArrayList;
 
 public class Utils {
-    public static final int RADIUS=6371000;
+    public static final boolean DEV_BUILD=true;
+
+    public static final int EARTH_RADIUS = 6371000;
+    public static final int WARNING_RADIUS = 500;
+
+    public static final int WARNING_CIRCLE_FILL_BLUE=Color.parseColor("#50009dff");
+    public static final int WARNING_CIRCLE_FILL_RED=Color.parseColor("#50ff4d4d");
 
     public static ParkingLot getClickedLot(LatLng latLng){
         ParkingLot finalLot=null;
@@ -31,15 +39,14 @@ public class Utils {
         return  finalLOT;
     }
     public static double getDistance(LatLng firstPoint,LatLng secondPoint){
-        int radius=6371000;
-        double convesionFactor=Math.PI/180;
-        double lat1=firstPoint.latitude*convesionFactor;
-        double lon1=firstPoint.longitude*convesionFactor;
-        double lat2=secondPoint.latitude*convesionFactor;
-        double lon2=secondPoint.longitude*convesionFactor;
+        double conversionFactor=Math.PI/180;
+        double lat1=firstPoint.latitude*conversionFactor;
+        double lon1=firstPoint.longitude*conversionFactor;
+        double lat2=secondPoint.latitude*conversionFactor;
+        double lon2=secondPoint.longitude*conversionFactor;
         double x=(lon2-lon1)*Math.cos((lat1+lat2)/2);
         double y=lat1-lat2;
-        double distance=RADIUS*Math.sqrt(x*x+y*y);
+        double distance= EARTH_RADIUS *Math.sqrt(x*x+y*y);
         return distance;
 
     }
@@ -68,10 +75,10 @@ public class Utils {
         Bitmap resizedBitmap=Bitmap.createScaledBitmap(originalBitmap,(int)(originalBitmap.getWidth()*factor),(int)(originalBitmap.getHeight()*factor),true);
         return resizedBitmap;
     }
-    public static boolean isinNoParking(LatLng latLng){
+    public static boolean isInNoParking(LatLng latLng){
         boolean isInNoParking=false;
         for(ParkingLot lot:DataHelper.getSingletonInstance().getParkingSpacesList()) {
-            if(getDistance(lot.getLocation(),latLng)<=500){
+            if(getDistance(lot.getLocation(),latLng)<=WARNING_RADIUS){
                 isInNoParking=true;
                 break;
             }
