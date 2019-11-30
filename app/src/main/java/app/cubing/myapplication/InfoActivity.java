@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.Switch;
+import android.widget.TextView;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.button.MaterialButton;
@@ -28,6 +29,7 @@ public class InfoActivity extends AppCompatActivity {
     MaterialButton helpButton;
     MaterialButton dataButton;
     MaterialButton contactButton;
+    TextView versionName;
     SwitchCompat busLotsSwitch;
 
     @Override
@@ -52,6 +54,9 @@ public class InfoActivity extends AppCompatActivity {
         helpButton =findViewById(R.id.help_button);
         dataButton=findViewById(R.id.data_button);
         contactButton=findViewById(R.id.contact_button);
+        versionName=findViewById(R.id.version_name);
+
+        versionName.setText("Version "+BuildConfig.VERSION_NAME);
         SharedPreferences preferences=getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         boolean showBusLots=preferences.getBoolean("showBusLots", true);
         busLotsSwitch.setChecked(showBusLots);
