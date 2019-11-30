@@ -76,6 +76,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
+
         ConstraintLayout bottomSheet=findViewById(R.id.bottom_sheet_layout);
         ConstraintLayout bestBottomSheet=findViewById(R.id.best_bottom_sheet_layout);
         behavior=BottomSheetBehavior.from(bottomSheet);
