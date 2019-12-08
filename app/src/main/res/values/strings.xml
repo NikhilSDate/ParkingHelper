@@ -2,53 +2,24 @@
     <string name="app_name">Mumbai Parking Finder</string>
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_info">InfoActivity</string>
-    <string name="help_text">Helpful quick tips:\n\nIf you do not see any parking lots around
-        you, pan around and zoom out until you see a lot.\n
-        The blue circle around a lot denotes a region of radius 500 meters around the lot.
-        Steep fines may apply if you park illegally within this zone.\n
-        Tap on or near the P sign to view details about a lot.\n
-        If you move within the blue circle around a lot, the circle will turn red. You will see
-        a warning notification. The border of the app will also turn bright red, and will stay red
-        while you are within 500 meters of the lot.
+    <string name="help_text">Helpful quick tips:\n\n
+        If you do not see any parking lots around you, pan around and zoom out until you see a lot.\n\n
+        The blue circle around a lot denotes a region of radius 500 meters around the lot. Steep fines may apply if you park illegally within this zone.\n\n
+        Tap on or near the P sign to view details about a lot.\n\n
+        If you move within the blue circle around a lot, the circle will turn red. You will see a warning notification. The border of the app will also turn bright red, and will stay red while you are within 500 meters of the lot.
     </string>
     <string name="about_text">
         Copyright @2019 all rights reserved\nNikhil Date
     </string>
 
-    <string name="privacy_text">This app asks for your geo location. It stores your location
-        locally, within the RAM memory of your device, only for the time that the app is running on
-        your device. This app does not ask for or store any kind of identifiable
-        information such as photos, name, age, gender etc.\n
-        This app does not ask for or store any financial information such as credit card or
-        bank account information etc.</string>
-    <string name="disclaimer_text">
-        By using this app you agree to accept the following
-        Limitation of Liability and Disclaimer of Warranty:\n
-        You agree to use the information shown by this app as is,
-        as you see fit, and entirely at your own risk. You further
-        accept that your particular situation may not be
-        entirely suited to the use of this information provided by
-        this app and therefore you agree to use the app with the
-        understanding and acceptance that the benefit derived by you
-        from the use of this app may or may not be optimal. The creator
-        of this app makes no representations or warranties with respect to
-        the accuracy or completeness of the parking information shown by this
-        app or any other information contained within the app and he
-        specifically disclaims any implied warranties of merchandability
-        or fitness for any particular purpose and shall in no event be liable
-        for any loss to you (either personal, commercial or non-commercial),
-        or loss of profit, or any kind of damage to you or your property,
-        including but not limited to physical, mental, special, incidental,
-        consequential, or other damages. This app is NOT endorsed by MCGM or BEST.
+    <string name="privacy_text">This app tracks your geo location. It stores your location temporarily within the RAM memory of your device, only for the time that the app is running on your device. This app does not ask for or store any kind of identifiable information such as photos, name, age, gender etc.\n\nThis app does not ask for or store any financial information such as credit card or bank account information etc.</string>
+    <string name="disclaimer_text">By using this app you agree to accept the following Limitation of Liability and Disclaimer of Warranty:\n\nYou agree to use the information shown by this app as is, as you see fit, and entirely at your own risk. You further accept that your particular situation may not be entirely suited to the use of this information provided by this app and therefore you agree to use the app with the understanding and acceptance that the benefit derived by you from the use of this app may or may not be optimal. The creator of this app makes no representations or warranties with respect to the accuracy or completeness of the parking information shown by this app or any other information contained within the app and he specifically disclaims any implied warranties of merchandability or fitness for any particular purpose and shall in no event be liable for any loss to you (either personal, commercial or non-commercial), or loss of profit, or any kind of damage to you or your property, including but not limited to physical, mental, special, incidental, consequential, or other damages.***This app is NOT endorsed by MCGM or BEST.***
     </string>
-    <string name="data_text">Contains data provided by Municipal Corporation of Greater Mumbai (MCGM) and Brihanmumbai Electric Supply Unit (BEST), and user submissions which may refer to privately operated public-parking facilities.\nMCGM and BEST operated lot data has been sourced from the MCGM website (data link provided on the Play store page)</string>
-    <string name="no_parking_message">CAUTION!\nYou are within 500 meters
-        of a public parking lot. STEEP FINES may apply for parking in
-        no-parking zones.</string>
+    <string name="data_text">Contains data provided by Municipal Corporation of Greater Mumbai (MCGM) and Brihanmumbai Electric Supply Unit (BEST), and user submissions which may refer to privately operated public-parking facilities(only after the creator of the app has verified and approved them).\nMCGM and BEST operated lot data has been sourced from the MCGM website (data link provided on the Play store page)</string>
+    <string name="no_parking_message">CAUTION!\nYou are within 500 meters of a public parking lot. STEEP FINES may apply for parking in no-parking zones.</string>
     <string name="contact_email">mumbaiparkinghelper@gmail.com</string>
     <string name="contact_email_subject">Request to add new parking lot</string>
-    <string name="contact_email_body">I have come across the following public parking lot which I think is not shown in your app:\n
-(Type address of parking lot here)</string>
+    <string name="contact_email_body">I have come across the following public parking lot which I think is not shown in your app:\n\n(Type address of parking lot here)</string>
     <string name="app_restart_message_title">Restart the application</string>
     <string name="app_restart_message_body">Enabling location-based features requires a restart of the application</string>
     <string name="preference_file_key">settings</string>
