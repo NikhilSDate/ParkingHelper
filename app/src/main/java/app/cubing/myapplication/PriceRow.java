@@ -2,6 +2,8 @@ package app.cubing.myapplication;
 
 import android.util.Log;
 
+import java.util.Objects;
+
 public class PriceRow {
     public static final int TIME_UPTO_1=0;
     public static final int TIME_1TO3=1;
@@ -18,16 +20,16 @@ public class PriceRow {
     public static final int VEHICLE_AUTOTAXI=10;
     public static final int VEHICLE_PT=11;
 
+    public static final int PRICE_NA=-1;
 
-    char priceCategory;
-    int timeCategory;
-    int vehicle;
-    int price;
-    public PriceRow(char priceCategory, int timeCategory, int vehicle, int price){
+
+    private char priceCategory;
+    private int timeCategory;
+    private int vehicle;
+    public PriceRow(char priceCategory, int timeCategory, int vehicle){
         this.priceCategory =priceCategory;
         this.timeCategory=timeCategory;
         this.vehicle=vehicle;
-        this.price=price;
     }
 
     public char getCategory() {
@@ -42,50 +44,34 @@ public class PriceRow {
         return vehicle;
     }
 
-    public int getPrice() {
-        return price;
-    }
 
-    public int getTimeFromString(String categoryString){
-        int timeCategory;
-        if(categoryString.equals("Upto 1")){
-            timeCategory=TIME_UPTO_1;
-        }else if(categoryString.equals("1-3 hrs")){
-            timeCategory=TIME_1TO3;
-        }else if(categoryString.equals("3-6 hrs")){
-            timeCategory=TIME_3TO6;
-        }else if(categoryString.equals("6-12 hrs")){
-            timeCategory=TIME_6TO12;
-        }else if(categoryString.equals(">12 hrs")){
-            timeCategory=TIME_MORETHAN12;
-        }else if(categoryString.equals("Monthly (day)")){
-            timeCategory=TIME_MONTHLY_DAY;
-        }else if(categoryString.equals("Monthly (night)")){
-            timeCategory=TIME_MONTHLY_NIGHT;
+
+    @Override
+    public boolean equals(Object object){
+        if(object instanceof PriceRow){
+            PriceRow castedObject=(PriceRow)object;
+            boolean equals=(priceCategory==castedObject.getCategory())&&
+                    (timeCategory==castedObject.getTimeCategory())&&
+                    (vehicle==castedObject.getVehicle());
+
+            return equals;
         }else{
-            timeCategory=-1;
+            return false;
         }
-        return timeCategory;
+
     }
-    public int getVehicleTypeFromString(String vehicleString){
-        int vehicleType;
-        if(vehicleString.equals("3/4 W")){
-            vehicleType=VEHICLE_34W;
-        }else if(vehicleString.equals("2 W")){
-            vehicleType=VEHICLE_2W;
-        }else if(vehicleString.equals("Truck")){
-            vehicleType=VEHICLE_TRUCK;
-        }else if(vehicleString.equals("Auto/Taxi")){
-            vehicleType=VEHICLE_AUTOTAXI;
-        }else if(vehicleString.equals("PT")){
-            vehicleType=VEHICLE_PT;
-        }else{
-            vehicleType=-1;
-        }
-        return vehicleType;
+    @Override
+    public int hashCode(){
+        return Objects.hash(this.priceCategory,this.timeCategory,this.vehicle);
+
     }
 
-
-
-
+    @Override
+    public String toString() {
+        return "PriceRow{" +
+                "priceCategory=" + priceCategory +
+                ", timeCategory=" + timeCategory +
+                ", vehicle=" + vehicle +
+                '}';
+    }
 }

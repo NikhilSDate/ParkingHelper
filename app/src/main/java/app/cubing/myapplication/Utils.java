@@ -11,7 +11,7 @@ import com.google.android.gms.maps.model.LatLng;
 import java.util.ArrayList;
 
 public class Utils {
-    public static final boolean DEV_BUILD=false;
+    public static final boolean DEV_BUILD=true;
 
     public static final int EARTH_RADIUS = 6371000;
     public static final int WARNING_RADIUS = 500;

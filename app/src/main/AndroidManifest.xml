@@ -21,7 +21,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".PriceCalculatorActivity"></activity>
         <activity android:name=".InfoActivity" />
         <activity
             android:name=".SplashActivity"

@@ -19,15 +19,21 @@ public class SplashActivity extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
+
                 Context context=SplashActivity.this;
                 try {
                     DataHelper.getSingletonInstance().loadData(context);
+                    PriceDataHelper.getSingletonInstance().loadData(context);
+                    if(Utils.DEV_BUILD) {
+                        Log.i("TAG", DataHelper.getSingletonInstance().getBESTParkingSpacesList().toString());
+                        Log.i("TAG", PriceDataHelper.getSingletonInstance().getPriceTable().toString());
+                    }
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
-                if (Utils.DEV_BUILD) {
-                    Log.i("TAG", DataHelper.getSingletonInstance().getBESTParkingSpacesList().toString());
-                }
+
+
+
                 Intent intent=new Intent(context,MapsActivity.class);
                 context.startActivity(intent);
 
