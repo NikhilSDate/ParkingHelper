@@ -88,7 +88,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         locationCenterButton =findViewById(R.id.location_center_fab);
         directionsButton=findViewById(R.id.directions_button);
         bestDirectionsButton=findViewById(R.id.best_directions_button);
-        priceCalculateButton=findViewById(R.id.price_calculate_button);
+//        priceCalculateButton=findViewById(R.id.price_calculate_button);
         infoButton=findViewById(R.id.info_button);
         parkingAlert=findViewById(R.id.parking_alert);
         parkingAlert.setVisibility(View.GONE);
@@ -221,11 +221,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             startActivity(mapIntent);
                         }
                     });
-                    priceCalculateButton.setOnClickListener(new View.OnClickListener(){
-                            public void onClick(View v){
-                                showPriceDialog(parkingLot.getPriceCategory());
-                        }
-                    });
+//                    priceCalculateButton.setOnClickListener(new View.OnClickListener(){
+//                            public void onClick(View v){
+//                                showPriceDialog(parkingLot.getPriceCategory());
+//                        }
+//                    });
                 } else {
                     behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
                 }
@@ -466,29 +466,29 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         bestBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
     }
     public void showPriceDialog(char priceCategory){
-        Dialog dialog=new Dialog(this);
-        dialog.setContentView(R.layout.price_dialog_layout);
-        TextView priceCategoryText=findViewById(R.id.price_category_text);
-        Spinner timeSpinner=findViewById(R.id.time_category_spinner);
-        Spinner vehicleSpinner=findViewById(R.id.vehicle_type_spinner);
-        TextView priceText=findViewById(R.id.price_text);
-        priceCategoryText.setText("Price category:"+priceCategory);
-
-        String[] timeCategoriesArray=new String[]{"Upto 1","1-3 hrs","3-6 hrs","6-12 hrs",">12 hrs","Monthly (day)","Monthly (night)"};
-        ArrayAdapter<String> timeAdapter=new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item,timeCategoriesArray);
-        timeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        timeSpinner.setAdapter(timeAdapter);
-
-        String[] vehiclesArray = new String[]{"3/4 W","2 W","Truck","Auto/Taxi","PT"};
-        ArrayAdapter<String> vehicleAdapter=new ArrayAdapter(this, android.R.layout.simple_spinner_item,vehiclesArray);
-        vehicleAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        vehicleSpinner.setAdapter(vehicleAdapter);
-
-        timeSpinner.setSelection(0);
-        vehicleSpinner.setSelection(0);
-
-        PriceRow criteria=new PriceRow(priceCategory,PriceDataHelper.getTimeFromString(timeSpinner.getSelectedItem().toString()),PriceDataHelper.getVehicleTypeFromString(vehicleSpinner.getSelectedItem().toString()));
-        Integer price=(Integer)PriceDataHelper.getSingletonInstance().getPriceTable().get(criteria);
+//        Dialog dialog=new Dialog(this);
+//        dialog.setContentView(R.layout.price_dialog_layout);
+//        TextView priceCategoryText=findViewById(R.id.price_category_text);
+//        Spinner timeSpinner=findViewById(R.id.time_category_spinner);
+//        Spinner vehicleSpinner=findViewById(R.id.vehicle_type_spinner);
+//        TextView priceText=findViewById(R.id.price_text);
+//        priceCategoryText.setText("Price category:"+priceCategory);
+//
+//        String[] timeCategoriesArray=new String[]{"Upto 1","1-3 hrs","3-6 hrs","6-12 hrs",">12 hrs","Monthly (day)","Monthly (night)"};
+//        ArrayAdapter<String> timeAdapter=new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item,timeCategoriesArray);
+//        timeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        timeSpinner.setAdapter(timeAdapter);
+//
+//        String[] vehiclesArray = new String[]{"3/4 W","2 W","Truck","Auto/Taxi","PT"};
+//        ArrayAdapter<String> vehicleAdapter=new ArrayAdapter(this, android.R.layout.simple_spinner_item,vehiclesArray);
+//        vehicleAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        vehicleSpinner.setAdapter(vehicleAdapter);
+//
+//        timeSpinner.setSelection(0);
+//        vehicleSpinner.setSelection(0);
+//
+//        PriceRow criteria=new PriceRow(priceCategory,PriceDataHelper.getTimeFromString(timeSpinner.getSelectedItem().toString()),PriceDataHelper.getVehicleTypeFromString(vehicleSpinner.getSelectedItem().toString()));
+//        Integer price=(Integer)PriceDataHelper.getSingletonInstance().getPriceTable().get(criteria);
 
 
     }
