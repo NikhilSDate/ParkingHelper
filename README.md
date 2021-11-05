@@ -23,13 +23,14 @@ This repository contains the code for the Mumbai Parking Finder Android applicat
 - Click the'Get Driving Directions' button in the parking lot details to automatically launch Google Maps directions with the destination set to the parking lot. 
 
 
-## Data
-
-This app uses the MCGM Off-street parking data which can be found [here](https://portal.mcgm.gov.in/irj/portal/anonymous/qlOffstreet)
 
 ## Sample screens
 
 ![Parking Spots](https://github.com/NikhilSDate/ParkingHelper/blob/master/screenshots/ss_1.png)  ![Alert](https://github.com/NikhilSDate/ParkingHelper/blob/master/screenshots/ss_2.png)
 
 ![Parking_Lot Info](https://github.com/NikhilSDate/ParkingHelper/blob/master/screenshots/ss_3.png)  ![Bus Lot Info](https://github.com/NikhilSDate/ParkingHelper/blob/master/screenshots/ss_4.png)
+
+## Data
+
+This app uses the MCGM Off-street parking data which can be found [here](https://portal.mcgm.gov.in/irj/portal/anonymous/qlOffstreet)
 
